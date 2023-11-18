@@ -14,7 +14,7 @@ import com.yusy.keykeeper.ui.components.AccountCard
 
 @Composable
 fun HomeUI(innerPadding: PaddingValues) {
-    val test_account_data = AccountData(
+    val testAccountData = AccountData(
         uid = "account",
         encryptedPasswd = "",
         encryptFunc = "",
@@ -24,13 +24,13 @@ fun HomeUI(innerPadding: PaddingValues) {
         appIcon = R.drawable.ic_launcher_foreground,
         createdAt = "2023/11/16"
     )
-    val test_account_data_list = List<AccountData>(20){test_account_data}
+    val testAccountDataList = List(20){testAccountData}
 
     Row(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             contentPadding = innerPadding,
         ) {
-            items(test_account_data_list) { item ->
+            items(testAccountDataList) { item ->
                 AccountCard(accountData = item)
             }
         }

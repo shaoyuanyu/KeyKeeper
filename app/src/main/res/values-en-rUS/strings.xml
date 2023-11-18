@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KeyKeeper</string>
+    <string name="nav_tab_home">Home</string>
+    <string name="nav_tab_search">Search</string>
+    <string name="nav_tab_mine">Mine</string>
+</resources>

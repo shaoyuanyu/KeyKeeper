@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KeyKeeper</string>
+
+    <string name="nav_tab_search">搜索</string>
+    <string name="nav_tab_mine">我的</string>
+    <string name="nav_tab_home">保险柜</string>
 </resources>
