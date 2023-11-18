@@ -9,12 +9,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.yusy.keykeeper.R
 
-object MyRouter {
+object MyRoutes {
     const val HOME = "Home"
     const val SEARCH = "Search"
     const val MINE = "Mine"
+    const val SETTING = "Setting"
+    const val ACCOUNT_CREATE_PAGE = "AccountCreatePage"
+    const val ACCOUNT_EDIT_PAGE = "AccountEditPage"
 }
-
 
 data class MyTopLevelDestination(
     val route: String,
@@ -23,24 +25,41 @@ data class MyTopLevelDestination(
     val iconTextId: Int
 )
 
+data class MySecondLevelDestination(
+    val route: String,
+)
+
+
 val TOP_LEVEL_DESTINATIONS = listOf(
     MyTopLevelDestination(
-        route = "Search",
+        route = MyRoutes.SEARCH,
         selectedIcon = Icons.Default.Search,
         unselectedIcon = Icons.Default.Search,
         iconTextId = R.string.nav_tab_search
     ),
     MyTopLevelDestination(
-        route = "Home",
+        route = MyRoutes.HOME,
         selectedIcon = Icons.Default.Home,
         unselectedIcon = Icons.Default.Home,
         iconTextId = R.string.nav_tab_home
     ),
     MyTopLevelDestination(
-        route = "Mine",
+        route = MyRoutes.MINE,
         selectedIcon = Icons.Default.Person,
         unselectedIcon = Icons.Default.Person,
         iconTextId = R.string.nav_tab_mine
+    ),
+)
+
+val SECOND_LEVEL_DESTINATIONS = listOf(
+    MySecondLevelDestination(
+        route = MyRoutes.SETTING,
+    ),
+    MySecondLevelDestination(
+        route = MyRoutes.ACCOUNT_CREATE_PAGE,
+    ),
+    MySecondLevelDestination(
+        route = MyRoutes.ACCOUNT_EDIT_PAGE,
     ),
 )
 
