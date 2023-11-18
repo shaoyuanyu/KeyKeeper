@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KeyKeeper</string>
+
     <string name="nav_tab_search">搜索</string>
     <string name="nav_tab_mine">我的</string>
     <string name="nav_tab_home">保险柜</string>
+
+    <string name="empty_screen_title">程序猿正在为此页面搬砖</string>
+    <string name="empty_screen_subtitle">尽请期待...</string>
 </resources>

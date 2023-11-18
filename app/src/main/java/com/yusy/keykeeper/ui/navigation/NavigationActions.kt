@@ -13,8 +13,8 @@ object MyRouter {
     const val HOME = "Home"
     const val SEARCH = "Search"
     const val MINE = "Mine"
-    const val SETTING = "Setting"
 }
+
 
 data class MyTopLevelDestination(
     val route: String,
