@@ -16,14 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.model.AccountData
 import com.yusy.keykeeper.model.AppType
 import com.yusy.keykeeper.ui.components.AccountCard
+import com.yusy.keykeeper.ui.navigation.MyNavActions
+import com.yusy.keykeeper.ui.navigation.MyRoutes
 
 @Composable
-fun HomeUI(innerPadding: PaddingValues) {
+fun HomeUI(
+    innerPadding: PaddingValues,
+//    myNavActions: MyNavActions
+    myNavController: NavController
+) {
     val testAccountData = AccountData(
+        id = "0000",
         uid = "account",
         encryptedPasswd = "",
         encryptFunc = "",
@@ -41,13 +49,18 @@ fun HomeUI(innerPadding: PaddingValues) {
             contentPadding = innerPadding,
         ) {
             items(testAccountDataList) { item ->
-                AccountCard(accountData = item)
+                AccountCard(
+                    accountData = item,
+                    onClick = {
+                        myNavController.navigate(MyRoutes.ACCOUNT_EDIT_PAGE + "/" + item.id)
+                    }
+                )
             }
         }
 
         LargeFloatingActionButton(
             onClick = {
-                /*TODO*/
+               myNavController.navigate(MyRoutes.ACCOUNT_CREATE_PAGE)
             },
             modifier = Modifier
                 .align(Alignment.BottomEnd)

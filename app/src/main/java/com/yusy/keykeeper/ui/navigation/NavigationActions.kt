@@ -63,7 +63,7 @@ val SECOND_LEVEL_DESTINATIONS = listOf(
     ),
 )
 
-class MyNavActions(private val navController: NavHostController) {
+class MyNavActions(val navController: NavHostController) {
     fun navigateTo(destination: MyTopLevelDestination) {
         navController.navigate(destination.route) {
             // Pop up to the start destination of the graph to

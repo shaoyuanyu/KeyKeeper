@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,14 +30,16 @@ import com.yusy.keykeeper.R
 import com.yusy.keykeeper.model.AccountData
 import com.yusy.keykeeper.model.AppType
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AccountCard(
     accountData: AccountData,
     isSelected: Boolean = false,
     isOpened: Boolean = false,
+    onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .semantics { selected = isSelected }
@@ -113,6 +116,7 @@ fun AccountCard(
 fun PreviewAccountCard() {
     AccountCard(
         AccountData(
+            id = "test000",
             uid = "",
             encryptedPasswd = "",
             encryptFunc = "",
@@ -121,6 +125,7 @@ fun PreviewAccountCard() {
             appUrl = "com.yusy.test",
             appIcon = R.drawable.ic_launcher_foreground,
             createdAt = "2023/11/16"
-        )
+        ),
+        onClick = {}
     )
 }

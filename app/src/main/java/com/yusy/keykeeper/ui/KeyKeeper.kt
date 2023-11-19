@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,10 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.navigation.NavigationBarUI
@@ -104,7 +105,10 @@ fun MyNavHost(
     ) {
         // top level destination
         composable(MyRoutes.HOME) {
-            HomeUI(innerPadding = innerPadding)
+            HomeUI(
+                innerPadding = innerPadding,
+                myNavController = myNavController
+            )
         }
         composable(MyRoutes.SEARCH) {
             SearchUI()
@@ -120,8 +124,13 @@ fun MyNavHost(
         composable(MyRoutes.ACCOUNT_CREATE_PAGE) {
             AccountCreatePageUI()
         }
-        composable(MyRoutes.ACCOUNT_EDIT_PAGE) {
-            AccountEditPageUI()
+        composable(
+            MyRoutes.ACCOUNT_EDIT_PAGE + "/{given_id}",
+            arguments = listOf(navArgument("given_id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            AccountEditPageUI(
+                id = backStackEntry.arguments?.getString("given_id").toString()
+            )
         }
     }
 }

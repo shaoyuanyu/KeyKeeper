@@ -10,6 +10,7 @@ enum class AppType {
 }
 
 data class AccountData(
+    val id: String, // 存储id
     val uid: String, // 用户名/账号/id
     val encryptedPasswd: String, // 已加密密码
     val encryptFunc: String, // 加密方式
