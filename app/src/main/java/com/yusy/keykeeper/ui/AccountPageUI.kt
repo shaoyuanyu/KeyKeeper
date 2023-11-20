@@ -1,8 +1,11 @@
 package com.yusy.keykeeper.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.aligned
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +17,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -22,6 +26,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,16 +57,18 @@ fun AccountCreatePageUI() {
     val appType by rememberSaveable { appTypeState }
     var appName by rememberSaveable { mutableStateOf("") }
     var appUrl by rememberSaveable { mutableStateOf("") }
+    var appIcon by rememberSaveable { mutableIntStateOf(R.drawable.ic_launcher_foreground) }
 
     Column(
         modifier = modifier,
     ) {
         val inputModifier = Modifier
             .fillMaxWidth()
-            .height(70.dp)
+            .height(80.dp)
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .align(Alignment.CenterHorizontally)
 
+        // app icon
         Box(
             modifier = modifier
                 .fillMaxWidth()
@@ -73,24 +80,28 @@ fun AccountCreatePageUI() {
                     .size(150.dp)
                     .clip(CircleShape)
                     .align(Alignment.Center),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = appIcon),
                 contentDescription = "app icon",
             )
         }
-
+        
+        // account id
         MyInputer(modifier = inputModifier, value = uid, onValueChange = { uid = it }, labelText = stringResource(R.string.account_page_account), isNecessary = false)
-
-        MyInputer(modifier = inputModifier, value = plainPasswd, onValueChange = { plainPasswd = it }, labelText = stringResource(R.string.account_page_passwd), isNecessary = true)
-
+        // passwd
+        MyInputer(modifier = inputModifier, value = plainPasswd, onValueChange = { plainPasswd = it }, labelText = stringResource(R.string.account_page_passwd))
+        
         AppTypeChoose(Modifier, appTypeState)
-
+        
         if (appType == AppType.AndroidAPP || appType == AppType.HmAPP) {
-            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isNecessary = true)
-            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_appname), isNecessary = true)
+            AppChooser(modifier = inputModifier)
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isReadonly = true)
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_appname))
         } else if (appType == AppType.Website) {
-            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl), isNecessary = true)
-            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_websitename), isNecessary = true)
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl))
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_websitename))
         }
+
+        SaveButton(modifier = inputModifier)
     }
 }
 
@@ -102,8 +113,62 @@ fun AccountCreatePageUI() {
 fun AccountEditPageUI(
     id: String
 ) {
-    Text(text = id)
-    EmptyUI()
+    val modifier = Modifier
+
+    var accountData = AccountData(
+        id = "0000",
+        uid = "account",
+        encryptedPasswd = "",
+        encryptFunc = "",
+        appType = AppType.AndroidAPP,
+        appName = "test",
+        appUrl = "com.yusy.test",
+        appIcon = R.drawable.ic_launcher_foreground,
+        createdAt = "2023/11/20"
+    )
+    var plainPasswd = "123456"
+
+    Column(
+        modifier = modifier,
+    ) {
+        val inputModifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .align(Alignment.CenterHorizontally)
+
+        // app icon
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Image(
+                modifier = modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.Center),
+                painter = painterResource(id = accountData.appIcon),
+                contentDescription = "app icon",
+            )
+        }
+
+        // account id
+        MyInputer(modifier = inputModifier, value = accountData.uid, onValueChange = { accountData.uid = it }, labelText = stringResource(R.string.account_page_account), isNecessary = false, isReadonly = true)
+        // passwd
+        MyInputer(modifier = inputModifier, value = plainPasswd, onValueChange = { plainPasswd = it }, labelText = stringResource(R.string.account_page_passwd))
+
+        if (accountData.appType == AppType.AndroidAPP || accountData.appType == AppType.HmAPP) {
+            MyInputer(modifier = inputModifier, value = accountData.appUrl, onValueChange = {  accountData.appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isReadonly = true)
+            MyInputer(modifier = inputModifier, value = accountData.appName, onValueChange = { accountData.appName = it }, labelText = stringResource(R.string.account_page_appname))
+        } else if (accountData.appType == AppType.Website) {
+            MyInputer(modifier = inputModifier, value = accountData.appUrl, onValueChange = {  accountData.appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl), isReadonly = true)
+            MyInputer(modifier = inputModifier, value = accountData.appName, onValueChange = { accountData.appName = it }, labelText = stringResource(R.string.account_page_websitename))
+        }
+
+        SaveButton(modifier = inputModifier)
+    }
 }
 
 /**
@@ -115,12 +180,14 @@ fun MyInputer(
     value: String,
     onValueChange: (String) -> Unit,
     labelText: String,
-    isNecessary: Boolean = false
+    isNecessary: Boolean = true,
+    isReadonly: Boolean = false
 ) {
     TextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
+        readOnly = isReadonly,
         label = {
             Row {
                 Text(labelText)
@@ -132,7 +199,7 @@ fun MyInputer(
                 }
             }
         },
-        leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+        leadingIcon = { if (!isReadonly) Icon(Icons.Default.Edit, contentDescription = "") },
         singleLine = true,
     )
 }
@@ -188,6 +255,39 @@ fun AppTypeChoose(
     }
 }
 
+/**
+ * AppChooser
+ */
+@Composable
+fun AppChooser(
+    modifier: Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = aligned(Alignment.CenterHorizontally)
+    ) {
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = stringResource(R.string.account_page_chooseapp))
+        }
+    }
+}
+
+/**
+ * SaveButton
+ */
+@Composable
+fun SaveButton(
+    modifier: Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = aligned(Alignment.CenterHorizontally)
+    ) {
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = stringResource(R.string.account_page_save))
+        }
+    }
+}
 
 @Preview
 @Composable

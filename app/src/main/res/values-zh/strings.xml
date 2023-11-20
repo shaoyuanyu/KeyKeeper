@@ -10,11 +10,13 @@
     <string name="empty_screen_subtitle">尽请期待...</string>
     <string name="account_page_account">账号</string>
     <string name="account_page_passwd">密码</string>
-    <string name="account_page_choosetype">选择类型</string>
+    <string name="account_page_choosetype">选择类型:</string>
     <string name="account_page_app">应用(app)</string>
     <string name="account_page_website">网站</string>
     <string name="account_page_appurl">应用包名</string>
     <string name="account_page_appname">应用名</string>
     <string name="account_page_websiteurl">网址</string>
     <string name="account_page_websitename">网站名</string>
+    <string name="account_page_chooseapp">选择应用(app)</string>
+    <string name="account_page_save">保存</string>
 </resources>
