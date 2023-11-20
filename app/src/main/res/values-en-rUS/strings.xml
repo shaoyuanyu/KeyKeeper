@@ -8,5 +8,13 @@
 
     <string name="empty_screen_title">Screen under construction</string>
     <string name="empty_screen_subtitle">please waiting...</string>
-    <string name="account_page_label_account">"account: "</string>
+    <string name="account_page_account">Account</string>
+    <string name="account_page_passwd">Password</string>
+    <string name="account_page_choosetype">Choose type</string>
+    <string name="account_page_app">App</string>
+    <string name="account_page_website">Website</string>
+    <string name="account_page_appurl">App package name</string>
+    <string name="account_page_appname">App name</string>
+    <string name="account_page_websiteurl">Website URL</string>
+    <string name="account_page_websitename">Website name</string>
 </resources>

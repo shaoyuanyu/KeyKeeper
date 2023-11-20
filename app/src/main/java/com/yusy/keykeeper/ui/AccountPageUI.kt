@@ -1,49 +1,96 @@
 package com.yusy.keykeeper.ui
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yusy.keykeeper.R
+import com.yusy.keykeeper.model.AccountData
+import com.yusy.keykeeper.model.AppType
 
 /**
  * AccountCreatePageUI
  * 账号创建页面
  */
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun AccountCreatePageUI() {
     val modifier = Modifier
 
-    Box(
-        modifier = modifier
+    var uid by rememberSaveable { mutableStateOf("") }
+    var plainPasswd by rememberSaveable { mutableStateOf("") }
+    val appTypeState = mutableStateOf(AppType.Unknown)
+    val appType by rememberSaveable { appTypeState }
+    var appName by rememberSaveable { mutableStateOf("") }
+    var appUrl by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = modifier,
     ) {
-        MyInputRow(
-            modifier = modifier,
-            rowLabel = "账号: ",
-            inputLabel = {
-                Row {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "input"
-                    )
-                    Text(text = "请输入账号")
-                }
-            }
-        )
+        val inputModifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .align(Alignment.CenterHorizontally)
+
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Image(
+                modifier = modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.Center),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "app icon",
+            )
+        }
+
+        MyInputer(modifier = inputModifier, value = uid, onValueChange = { uid = it }, labelText = stringResource(R.string.account_page_account), isNecessary = false)
+
+        MyInputer(modifier = inputModifier, value = plainPasswd, onValueChange = { plainPasswd = it }, labelText = stringResource(R.string.account_page_passwd), isNecessary = true)
+
+        AppTypeChoose(Modifier, appTypeState)
+
+        if (appType == AppType.AndroidAPP || appType == AppType.HmAPP) {
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isNecessary = true)
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_appname), isNecessary = true)
+        } else if (appType == AppType.Website) {
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl), isNecessary = true)
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_websitename), isNecessary = true)
+        }
     }
 }
 
@@ -55,44 +102,92 @@ fun AccountCreatePageUI() {
 fun AccountEditPageUI(
     id: String
 ) {
+    Text(text = id)
     EmptyUI()
 }
 
 /**
- *
+ * MyInputer
  */
 @Composable
-fun MyInputRow(
+fun MyInputer(
     modifier: Modifier,
-    rowLabel: String,
-    inputLabel: @Composable (() -> Unit)
+    value: String,
+    onValueChange: (String) -> Unit,
+    labelText: String,
+    isNecessary: Boolean = false
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
+    TextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            Row {
+                Text(labelText)
+                if (isNecessary) {
+                    Text(
+                        color = MaterialTheme.colorScheme.error,
+                        text = "*"
+                    )
+                }
+            }
+        },
+        leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+        singleLine = true,
+    )
+}
 
-    Row(
-        modifier = modifier
-            .height(50.dp)
-    ) {
+/**
+ * AppTypeChoose
+ */
+@Composable
+fun AppTypeChoose(
+    modifier: Modifier,
+    appTypeState: MutableState<AppType>,
+) {
+    var appType by remember { appTypeState }
+
+    Row(modifier.selectableGroup()) {
+        val choiceModifier = modifier.align(Alignment.CenterVertically)
+
+        // 类型选择提示词
         Text(
-            modifier = modifier
-                .align(Alignment.CenterVertically)
-                .padding(10.dp),
-            text = rowLabel
+            modifier = choiceModifier.padding(horizontal = 20.dp),
+            text = stringResource(R.string.account_page_choosetype)
         )
 
-        TextField(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            value = text,
-            onValueChange = {
-                text = it
-            },
-            label = inputLabel,
-            singleLine = true
-        )
+        // website
+        Row(modifier.padding(10.dp)) {
+            RadioButton(
+                modifier = choiceModifier,
+                selected = (appType == AppType.Website),
+                onClick = {
+                    appType = AppType.Website
+                },
+            )
+            Text(
+                modifier = choiceModifier,
+                text = stringResource(R.string.account_page_website)
+            )
+        }
+
+        // app
+        Row(modifier.padding(10.dp)) {
+            RadioButton(
+                modifier = choiceModifier,
+                selected = (appType == AppType.AndroidAPP),
+                onClick = {
+                     appType = AppType.AndroidAPP
+                },
+            )
+            Text(
+                modifier = choiceModifier,
+                text = stringResource(R.string.account_page_app)
+            )
+        }
     }
 }
+
 
 @Preview
 @Composable
