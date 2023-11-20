@@ -1,10 +1,8 @@
 package com.yusy.keykeeper.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.aligned
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +15,15 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -51,6 +53,7 @@ import com.yusy.keykeeper.model.AppType
 fun AccountCreatePageUI() {
     val modifier = Modifier
 
+    //
     var uid by rememberSaveable { mutableStateOf("") }
     var plainPasswd by rememberSaveable { mutableStateOf("") }
     val appTypeState = mutableStateOf(AppType.Unknown)
@@ -58,6 +61,23 @@ fun AccountCreatePageUI() {
     var appName by rememberSaveable { mutableStateOf("") }
     var appUrl by rememberSaveable { mutableStateOf("") }
     var appIcon by rememberSaveable { mutableIntStateOf(R.drawable.ic_launcher_foreground) }
+    //
+    val inputCheckAlertState = mutableStateOf(false)
+    var inputCheckAlert by rememberSaveable { inputCheckAlertState }
+    var alergText by rememberSaveable { mutableStateOf("") }
+
+    fun checkInput() {
+        if (plainPasswd.isEmpty()) {
+            inputCheckAlert = true
+            alergText = "密码不得为空!"
+        }
+    }
+
+    // 弹窗警告
+    InputCheckAlert(
+        openDialogState = inputCheckAlertState,
+        alertText = alergText
+    )
 
     Column(
         modifier = modifier,
@@ -101,7 +121,7 @@ fun AccountCreatePageUI() {
             MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_websitename))
         }
 
-        SaveButton(modifier = inputModifier)
+        SaveButton(modifier = inputModifier, onClick = { checkInput() })
     }
 }
 
@@ -109,24 +129,46 @@ fun AccountCreatePageUI() {
  * AccountEditPageUI
  * 账号编辑页面
  */
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun AccountEditPageUI(
     id: String
 ) {
     val modifier = Modifier
 
-    var accountData = AccountData(
-        id = "0000",
-        uid = "account",
-        encryptedPasswd = "",
-        encryptFunc = "",
-        appType = AppType.AndroidAPP,
-        appName = "test",
-        appUrl = "com.yusy.test",
-        appIcon = R.drawable.ic_launcher_foreground,
-        createdAt = "2023/11/20"
+    //
+    var accountData by remember {
+        mutableStateOf(AccountData(
+            id = "0000",
+            uid = "account",
+            encryptedPasswd = "",
+            encryptFunc = "",
+            appType = AppType.AndroidAPP,
+            appName = "test",
+            appUrl = "com.yusy.test",
+            appIcon = R.drawable.ic_launcher_foreground,
+            createdAt = "2023/11/20"
+        ))
+    }
+    var plainPasswd by remember { mutableStateOf("123456") }
+    //
+    val inputCheckAlertState = mutableStateOf(false)
+    var inputCheckAlert by rememberSaveable { inputCheckAlertState }
+    var alergText by rememberSaveable { mutableStateOf("") }
+
+    fun checkInput() {
+        if (plainPasswd.isEmpty()) {
+            inputCheckAlert = true
+            alergText = "密码不得为空!"
+        }
+    }
+
+    // 弹窗警告
+    InputCheckAlert(
+        openDialogState = inputCheckAlertState,
+        alertText = alergText
     )
-    var plainPasswd = "123456"
+
 
     Column(
         modifier = modifier,
@@ -167,7 +209,7 @@ fun AccountEditPageUI(
             MyInputer(modifier = inputModifier, value = accountData.appName, onValueChange = { accountData.appName = it }, labelText = stringResource(R.string.account_page_websitename))
         }
 
-        SaveButton(modifier = inputModifier)
+        SaveButton(modifier = inputModifier, onClick = { checkInput() })
     }
 }
 
@@ -277,17 +319,51 @@ fun AppChooser(
  */
 @Composable
 fun SaveButton(
-    modifier: Modifier
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = aligned(Alignment.CenterHorizontally)
     ) {
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            onClick = {
+                onClick()
+            }
+        ) {
             Text(text = stringResource(R.string.account_page_save))
         }
     }
 }
+
+/**
+ * InputCheckAlert
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InputCheckAlert(
+    openDialogState: MutableState<Boolean>,
+    alertText: String
+) {
+    var openDialog by rememberSaveable { openDialogState }
+
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = { openDialog = false },
+            title = { Text(text = "账号信息不完整") },
+            icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "") },
+            text = { Text(alertText) },
+            confirmButton = {
+                TextButton(
+                    onClick = { openDialog = false }
+                ) {
+                    Text("确认")
+                }
+            }
+        )
+    }
+}
+
 
 @Preview
 @Composable
@@ -299,4 +375,10 @@ fun PreviewAccountCreatePageUI() {
 @Composable
 fun PreviewAccountEditPageUI() {
     AccountEditPageUI("test000")
+}
+
+@Preview
+@Composable
+fun PreviewInputCheckAlert() {
+//    InputCheckAlert("密码不可为空!")
 }
