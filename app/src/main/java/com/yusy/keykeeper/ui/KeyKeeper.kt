@@ -43,6 +43,7 @@ fun MyContent() {
     val myNavActions = remember(myNavController) {
         MyNavActions(myNavController)
     }
+
     val navBackStackEntry by myNavController.currentBackStackEntryAsState()
     val selectedDestination = navBackStackEntry?.destination?.route ?: MyRoutes.HOME
 
@@ -51,25 +52,6 @@ fun MyContent() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            /*
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                content = { innerPadding ->
-                    MyNavHost(
-                        modifier = Modifier.fillMaxSize(),
-                        myNavController = myNavController,
-                        innerPadding = innerPadding
-                    )
-                },
-                bottomBar = {
-                    NavigationBarUI(
-                        selectedDestination = selectedDestination,
-                        myNavActions = myNavActions
-                    )
-                },
-            )
-            */
-
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -78,6 +60,7 @@ fun MyContent() {
                         .fillMaxSize()
                         .weight(1f),
                     myNavController = myNavController,
+                    myNavActions = myNavActions,
                     innerPadding = PaddingValues(8.dp)
                 )
 
@@ -96,6 +79,7 @@ fun MyContent() {
 fun MyNavHost(
     modifier: Modifier = Modifier,
     myNavController: NavHostController,
+    myNavActions: MyNavActions,
     innerPadding: PaddingValues
 ) {
     NavHost(
@@ -107,7 +91,7 @@ fun MyNavHost(
         composable(MyRoutes.HOME) {
             HomeUI(
                 innerPadding = innerPadding,
-                myNavController = myNavController
+                myNavActions = myNavActions
             )
         }
         composable(MyRoutes.SEARCH) {

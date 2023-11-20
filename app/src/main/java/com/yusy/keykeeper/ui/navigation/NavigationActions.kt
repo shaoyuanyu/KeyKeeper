@@ -10,9 +10,12 @@ import androidx.navigation.NavHostController
 import com.yusy.keykeeper.R
 
 object MyRoutes {
+    // top level
     const val HOME = "Home"
     const val SEARCH = "Search"
     const val MINE = "Mine"
+
+    // second level
     const val SETTING = "Setting"
     const val ACCOUNT_CREATE_PAGE = "AccountCreatePage"
     const val ACCOUNT_EDIT_PAGE = "AccountEditPage"
@@ -27,6 +30,7 @@ data class MyTopLevelDestination(
 
 data class MySecondLevelDestination(
     val route: String,
+    val param: String = ""
 )
 
 
@@ -51,19 +55,7 @@ val TOP_LEVEL_DESTINATIONS = listOf(
     ),
 )
 
-val SECOND_LEVEL_DESTINATIONS = listOf(
-    MySecondLevelDestination(
-        route = MyRoutes.SETTING,
-    ),
-    MySecondLevelDestination(
-        route = MyRoutes.ACCOUNT_CREATE_PAGE,
-    ),
-    MySecondLevelDestination(
-        route = MyRoutes.ACCOUNT_EDIT_PAGE,
-    ),
-)
-
-class MyNavActions(val navController: NavHostController) {
+class MyNavActions(private val navController: NavHostController) {
     fun navigateTo(destination: MyTopLevelDestination) {
         navController.navigate(destination.route) {
             // Pop up to the start destination of the graph to
@@ -76,6 +68,23 @@ class MyNavActions(val navController: NavHostController) {
             // reselecting the same item
             launchSingleTop = true
             // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
+    }
+
+    fun navigateTo(destination: MySecondLevelDestination) {
+        var routeString: String
+        if (destination.param.isEmpty()) {
+            routeString = destination.route
+        } else {
+            routeString = destination.route + "/" + destination.param
+        }
+
+        navController.navigate(routeString) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
             restoreState = true
         }
     }

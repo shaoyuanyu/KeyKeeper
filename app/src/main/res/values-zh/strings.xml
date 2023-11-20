@@ -8,4 +8,5 @@
 
     <string name="empty_screen_title">程序猿正在为此页面搬砖</string>
     <string name="empty_screen_subtitle">尽请期待...</string>
+    <string name="account_page_label_account">"账号: "</string>
 </resources>

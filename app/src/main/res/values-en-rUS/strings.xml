@@ -8,4 +8,5 @@
 
     <string name="empty_screen_title">Screen under construction</string>
     <string name="empty_screen_subtitle">please waiting...</string>
+    <string name="account_page_label_account">"account: "</string>
 </resources>

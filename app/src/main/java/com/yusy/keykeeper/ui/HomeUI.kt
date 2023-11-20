@@ -16,19 +16,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.model.AccountData
 import com.yusy.keykeeper.model.AppType
 import com.yusy.keykeeper.ui.components.AccountCard
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
+import com.yusy.keykeeper.ui.navigation.MySecondLevelDestination
 
 @Composable
 fun HomeUI(
     innerPadding: PaddingValues,
-//    myNavActions: MyNavActions
-    myNavController: NavController
+    myNavActions: MyNavActions
 ) {
     val testAccountData = AccountData(
         id = "0000",
@@ -52,7 +51,12 @@ fun HomeUI(
                 AccountCard(
                     accountData = item,
                     onClick = {
-                        myNavController.navigate(MyRoutes.ACCOUNT_EDIT_PAGE + "/" + item.id)
+                        myNavActions.navigateTo(
+                            MySecondLevelDestination(
+                                route = MyRoutes.ACCOUNT_EDIT_PAGE,
+                                param = item.id
+                            )
+                        )
                     }
                 )
             }
@@ -60,7 +64,11 @@ fun HomeUI(
 
         LargeFloatingActionButton(
             onClick = {
-               myNavController.navigate(MyRoutes.ACCOUNT_CREATE_PAGE)
+                 myNavActions.navigateTo(
+                     MySecondLevelDestination(
+                         route = MyRoutes.ACCOUNT_CREATE_PAGE
+                     )
+                 )
             },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
