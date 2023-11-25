@@ -22,4 +22,10 @@
     <string name="account_page_websitename">网站名</string>
     <string name="account_page_chooseapp">选择应用(app)</string>
     <string name="account_page_save">保存</string>
+    <string name="account_page_warning_passwdempty">密码不得为空!</string>
+    <string name="account_page_warning_typeempty">请选择类型为网站或应用(app)!</string>
+    <string name="account_page_warning_urlempty_web">请输入网站地址!</string>
+    <string name="account_page_warning_urlempty_app">请选择应用(app)!</string>
+    <string name="account_page_warning_nameempty_web">网站名不得为空!</string>
+    <string name="account_page_warning_nameempty_app">应用名不得为空!</string>
 </resources>

@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -41,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
-import com.yusy.keykeeper.model.AccountData
 import com.yusy.keykeeper.model.AppType
 
 /**
@@ -60,23 +58,47 @@ fun AccountCreatePageUI() {
     val appType by rememberSaveable { appTypeState }
     var appName by rememberSaveable { mutableStateOf("") }
     var appUrl by rememberSaveable { mutableStateOf("") }
-    var appIcon by rememberSaveable { mutableIntStateOf(R.drawable.ic_launcher_foreground) }
+    val appIcon by rememberSaveable { mutableIntStateOf(R.drawable.ic_launcher_foreground) }
     //
     val inputCheckAlertState = mutableStateOf(false)
     var inputCheckAlert by rememberSaveable { inputCheckAlertState }
-    var alergText by rememberSaveable { mutableStateOf("") }
+    var alertText by rememberSaveable { mutableIntStateOf(0) }
 
     fun checkInput() {
         if (plainPasswd.isEmpty()) {
             inputCheckAlert = true
-            alergText = "密码不得为空!"
+            alertText = R.string.account_page_warning_passwdempty
+            return
+        }
+        if (appType == AppType.Unknown) {
+            inputCheckAlert = true
+            alertText = R.string.account_page_warning_typeempty
+            return
+        }
+        if (appUrl.isEmpty()) {
+            inputCheckAlert = true
+            if (appType == AppType.Website) {
+                alertText = R.string.account_page_warning_urlempty_web
+            } else if (appType == AppType.AndroidAPP) {
+                alertText =R.string.account_page_warning_urlempty_app
+            }
+            return
+        }
+        if (appName.isEmpty()) {
+            inputCheckAlert = true
+            if (appType == AppType.Website) {
+                alertText = R.string.account_page_warning_nameempty_web
+            } else if (appType == AppType.AndroidAPP) {
+                alertText = R.string.account_page_warning_nameempty_app
+            }
+            return
         }
     }
 
     // 弹窗警告
     InputCheckAlert(
         openDialogState = inputCheckAlertState,
-        alertText = alergText
+        alertText = alertText
     )
 
     Column(
@@ -136,37 +158,37 @@ fun AccountEditPageUI(
 ) {
     val modifier = Modifier
 
-    //
-    var accountData by remember {
-        mutableStateOf(AccountData(
-            id = "0000",
-            uid = "account",
-            encryptedPasswd = "",
-            encryptFunc = "",
-            appType = AppType.AndroidAPP,
-            appName = "test",
-            appUrl = "com.yusy.test",
-            appIcon = R.drawable.ic_launcher_foreground,
-            createdAt = "2023/11/20"
-        ))
-    }
+    var uid by rememberSaveable { mutableStateOf("account") }
     var plainPasswd by remember { mutableStateOf("123456") }
+    val appType by rememberSaveable { mutableStateOf(AppType.AndroidAPP) }
+    var appName by rememberSaveable { mutableStateOf("test app") }
+    var appUrl by rememberSaveable { mutableStateOf("com.yusy.test") }
+    val appIcon by rememberSaveable { mutableIntStateOf(R.drawable.ic_launcher_foreground) }
     //
     val inputCheckAlertState = mutableStateOf(false)
     var inputCheckAlert by rememberSaveable { inputCheckAlertState }
-    var alergText by rememberSaveable { mutableStateOf("") }
+    var alertText by rememberSaveable { mutableIntStateOf(0) }
 
     fun checkInput() {
         if (plainPasswd.isEmpty()) {
             inputCheckAlert = true
-            alergText = "密码不得为空!"
+            alertText = R.string.account_page_warning_passwdempty
+        }
+        if (appName.isEmpty()) {
+            inputCheckAlert = true
+            if (appType == AppType.Website) {
+                alertText = R.string.account_page_warning_nameempty_web
+            } else if (appType == AppType.AndroidAPP) {
+                alertText = R.string.account_page_warning_nameempty_app
+            }
+            return
         }
     }
 
     // 弹窗警告
     InputCheckAlert(
         openDialogState = inputCheckAlertState,
-        alertText = alergText
+        alertText = alertText
     )
 
 
@@ -191,22 +213,22 @@ fun AccountEditPageUI(
                     .size(150.dp)
                     .clip(CircleShape)
                     .align(Alignment.Center),
-                painter = painterResource(id = accountData.appIcon),
+                painter = painterResource(id = appIcon),
                 contentDescription = "app icon",
             )
         }
 
         // account id
-        MyInputer(modifier = inputModifier, value = accountData.uid, onValueChange = { accountData.uid = it }, labelText = stringResource(R.string.account_page_account), isNecessary = false, isReadonly = true)
+        MyInputer(modifier = inputModifier, value = uid, onValueChange = { uid = it }, labelText = stringResource(R.string.account_page_account), isNecessary = false, isReadonly = true)
         // passwd
         MyInputer(modifier = inputModifier, value = plainPasswd, onValueChange = { plainPasswd = it }, labelText = stringResource(R.string.account_page_passwd))
 
-        if (accountData.appType == AppType.AndroidAPP || accountData.appType == AppType.HmAPP) {
-            MyInputer(modifier = inputModifier, value = accountData.appUrl, onValueChange = {  accountData.appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isReadonly = true)
-            MyInputer(modifier = inputModifier, value = accountData.appName, onValueChange = { accountData.appName = it }, labelText = stringResource(R.string.account_page_appname))
-        } else if (accountData.appType == AppType.Website) {
-            MyInputer(modifier = inputModifier, value = accountData.appUrl, onValueChange = {  accountData.appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl), isReadonly = true)
-            MyInputer(modifier = inputModifier, value = accountData.appName, onValueChange = { accountData.appName = it }, labelText = stringResource(R.string.account_page_websitename))
+        if (appType == AppType.AndroidAPP || appType == AppType.HmAPP) {
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_appurl), isReadonly = true)
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_appname))
+        } else if (appType == AppType.Website) {
+            MyInputer(modifier = inputModifier, value = appUrl, onValueChange = {  appUrl = it }, labelText = stringResource(R.string.account_page_websiteurl), isReadonly = true)
+            MyInputer(modifier = inputModifier, value = appName, onValueChange = { appName = it }, labelText = stringResource(R.string.account_page_websitename))
         }
 
         SaveButton(modifier = inputModifier, onClick = { checkInput() })
@@ -339,11 +361,10 @@ fun SaveButton(
 /**
  * InputCheckAlert
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputCheckAlert(
     openDialogState: MutableState<Boolean>,
-    alertText: String
+    alertText: Int
 ) {
     var openDialog by rememberSaveable { openDialogState }
 
@@ -352,7 +373,7 @@ fun InputCheckAlert(
             onDismissRequest = { openDialog = false },
             title = { Text(text = "账号信息不完整") },
             icon = { Icon(imageVector = Icons.Default.Warning, contentDescription = "") },
-            text = { Text(alertText) },
+            text = { Text(stringResource(alertText)) },
             confirmButton = {
                 TextButton(
                     onClick = { openDialog = false }
@@ -377,8 +398,13 @@ fun PreviewAccountEditPageUI() {
     AccountEditPageUI("test000")
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun PreviewInputCheckAlert() {
-//    InputCheckAlert("密码不可为空!")
+    val inputCheckAlertState = mutableStateOf(false)
+    InputCheckAlert(
+        openDialogState = inputCheckAlertState,
+        alertText = R.string.account_page_warning_passwdempty
+    )
 }

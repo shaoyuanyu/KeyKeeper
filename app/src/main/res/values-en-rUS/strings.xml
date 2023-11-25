@@ -19,4 +19,10 @@
     <string name="account_page_websitename">Website name</string>
     <string name="account_page_chooseapp">Choose app</string>
     <string name="account_page_save">Save</string>
+    <string name="account_page_warning_passwdempty">Password cannot stay empty!</string>
+    <string name="account_page_warning_typeempty">Please choose type as website or app!</string>
+    <string name="account_page_warning_urlempty_web">Please enter website url!</string>
+    <string name="account_page_warning_urlempty_app">Please choose app!</string>
+    <string name="account_page_warning_nameempty_web">Website name cannot stay empty!</string>
+    <string name="account_page_warning_nameempty_app">App name cannot stay empty!</string>
 </resources>
