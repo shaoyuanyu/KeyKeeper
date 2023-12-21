@@ -20,6 +20,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.model.AppType
+import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 /**
  * AccountCreatePageUI
@@ -247,7 +249,7 @@ fun MyInputer(
     isNecessary: Boolean = true,
     isReadonly: Boolean = false
 ) {
-    TextField(
+    OutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
@@ -349,6 +351,7 @@ fun SaveButton(
         horizontalArrangement = aligned(Alignment.CenterHorizontally)
     ) {
         Button(
+            shape = MaterialTheme.shapes.extraSmall,
             onClick = {
                 onClick()
             }
@@ -389,13 +392,17 @@ fun InputCheckAlert(
 @Preview
 @Composable
 fun PreviewAccountCreatePageUI() {
-    AccountCreatePageUI()
+    KeyKeeperTheme {
+        AccountCreatePageUI()
+    }
 }
 
 @Preview
 @Composable
 fun PreviewAccountEditPageUI() {
-    AccountEditPageUI("test000")
+    KeyKeeperTheme {
+        AccountEditPageUI("test000")
+    }
 }
 
 @SuppressLint("UnrememberedMutableState")
@@ -403,8 +410,10 @@ fun PreviewAccountEditPageUI() {
 @Composable
 fun PreviewInputCheckAlert() {
     val inputCheckAlertState = mutableStateOf(false)
-    InputCheckAlert(
-        openDialogState = inputCheckAlertState,
-        alertText = R.string.account_page_warning_passwdempty
-    )
+    KeyKeeperTheme {
+        InputCheckAlert(
+            openDialogState = inputCheckAlertState,
+            alertText = R.string.account_page_warning_passwdempty
+        )
+    }
 }

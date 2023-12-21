@@ -106,8 +106,9 @@ fun KeyKeeperTheme(
     }
 
     MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-            content = content
+        colorScheme = colorScheme,
+        typography = Typography,
+        shapes = RhombusShapes,
+        content = content
     )
 }

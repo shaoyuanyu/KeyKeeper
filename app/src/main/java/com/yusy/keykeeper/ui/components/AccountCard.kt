@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.model.AccountData
 import com.yusy.keykeeper.model.AppType
+import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -114,18 +115,20 @@ fun AccountCard(
 @Preview
 @Composable
 fun PreviewAccountCard() {
-    AccountCard(
-        AccountData(
-            id = "test000",
-            uid = "",
-            encryptedPasswd = "",
-            encryptFunc = "",
-            appType = AppType.AndroidAPP,
-            appName = "test",
-            appUrl = "com.yusy.test",
-            appIcon = R.drawable.ic_launcher_foreground,
-            createdAt = "2023/11/16"
-        ),
-        onClick = {}
-    )
+    KeyKeeperTheme {
+        AccountCard(
+            AccountData(
+                id = "test000",
+                uid = "",
+                encryptedPasswd = "",
+                encryptFunc = "",
+                appType = AppType.AndroidAPP,
+                appName = "test",
+                appUrl = "com.yusy.test",
+                appIcon = R.drawable.ic_launcher_foreground,
+                createdAt = "2023/11/16"
+            ),
+            onClick = {}
+        )
+    }
 }
