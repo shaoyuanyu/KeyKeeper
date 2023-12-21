@@ -1,4 +1,4 @@
-package com.yusy.keykeeper.ui
+package com.yusy.keykeeper.ui.pages.account
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image

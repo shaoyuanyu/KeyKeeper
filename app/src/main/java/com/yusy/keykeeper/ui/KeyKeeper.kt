@@ -24,6 +24,12 @@ import androidx.navigation.navArgument
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.navigation.NavigationBarUI
+import com.yusy.keykeeper.ui.pages.account.AccountCreatePageUI
+import com.yusy.keykeeper.ui.pages.account.AccountEditPageUI
+import com.yusy.keykeeper.ui.pages.home.HomeUI
+import com.yusy.keykeeper.ui.pages.mine.MineUI
+import com.yusy.keykeeper.ui.pages.search.SearchUI
+import com.yusy.keykeeper.ui.pages.setting.SettingUI
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 class KeyKeeper: ComponentActivity() {

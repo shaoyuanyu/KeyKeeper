@@ -1,4 +1,4 @@
-package com.yusy.keykeeper.ui
+package com.yusy.keykeeper.ui.pages.empty
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
