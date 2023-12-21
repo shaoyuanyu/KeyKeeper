@@ -27,14 +27,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
-import com.yusy.keykeeper.model.AccountData
-import com.yusy.keykeeper.model.AppType
+import com.yusy.keykeeper.data.account.Account
+import com.yusy.keykeeper.data.account.AppType
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AccountCard(
-    accountData: AccountData,
+    account: Account,
     isSelected: Boolean = false,
     isOpened: Boolean = false,
     onClick: () -> Unit
@@ -68,11 +68,11 @@ fun AccountCard(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = accountData.appName,
+                        text = account.appName,
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = accountData.createdAt,
+                        text = account.createdAt,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline
                     )
@@ -88,21 +88,21 @@ fun AccountCard(
                         modifier = Modifier
                             .size(50.dp)
                             .clip(CircleShape),
-                        painter = painterResource(id = accountData.appIcon),
+                        painter = painterResource(id = account.appIcon),
                         contentDescription = "app icon",
                     )
                 }
             }
 
             Text(
-                text = accountData.uid,
+                text = account.uid,
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
             )
             Text(
-                text = accountData.appUrl,
+                text = account.appUrl,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 2,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -117,8 +117,8 @@ fun AccountCard(
 fun PreviewAccountCard() {
     KeyKeeperTheme {
         AccountCard(
-            AccountData(
-                id = "test000",
+            Account(
+                id = 0,
                 uid = "",
                 encryptedPasswd = "",
                 encryptFunc = "",

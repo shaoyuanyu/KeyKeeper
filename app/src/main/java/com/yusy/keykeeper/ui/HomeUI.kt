@@ -11,30 +11,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
-import com.yusy.keykeeper.model.AccountData
-import com.yusy.keykeeper.model.AppType
+import com.yusy.keykeeper.data.account.Account
+import com.yusy.keykeeper.data.account.AppType
 import com.yusy.keykeeper.ui.components.AccountCard
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.navigation.MySecondLevelDestination
-import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 @Composable
 fun HomeUI(
     innerPadding: PaddingValues,
     myNavActions: MyNavActions
 ) {
-    val testAccountData = AccountData(
-        id = "0000",
+    val testAccount = Account(
+        id = 0,
         uid = "account",
         encryptedPasswd = "",
         encryptFunc = "",
@@ -44,7 +40,7 @@ fun HomeUI(
         appIcon = R.drawable.ic_launcher_foreground,
         createdAt = "2023/11/16"
     )
-    val testAccountDataList = List(10){testAccountData}
+    val testAccountDataList = List(10){testAccount}
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -53,12 +49,12 @@ fun HomeUI(
         ) {
             items(testAccountDataList) { item ->
                 AccountCard(
-                    accountData = item,
+                    account = item,
                     onClick = {
                         myNavActions.navigateTo(
                             MySecondLevelDestination(
                                 route = MyRoutes.ACCOUNT_EDIT_PAGE,
-                                param = item.id
+                                param = item.id.toString()
                             )
                         )
                     }

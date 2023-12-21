@@ -24,7 +24,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -41,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
-import com.yusy.keykeeper.model.AppType
+import com.yusy.keykeeper.data.account.AppType
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 /**
@@ -332,7 +331,10 @@ fun AppChooser(
         modifier = modifier,
         horizontalArrangement = aligned(Alignment.CenterHorizontally)
     ) {
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            shape = MaterialTheme.shapes.extraSmall,
+            onClick = { /*TODO*/ }
+        ) {
             Text(text = stringResource(R.string.account_page_chooseapp))
         }
     }
