@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.data.account.Account
 import com.yusy.keykeeper.data.account.AppType
+import com.yusy.keykeeper.data.account.EncryptFunc
 import com.yusy.keykeeper.ui.components.AccountCard
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
@@ -33,7 +34,7 @@ fun HomeUI(
         id = 0,
         uid = "account",
         encryptedPasswd = "",
-        encryptFunc = "",
+        encryptFunc = EncryptFunc.fun1,
         appType = AppType.AndroidAPP,
         appName = "test",
         appUrl = "com.yusy.test",

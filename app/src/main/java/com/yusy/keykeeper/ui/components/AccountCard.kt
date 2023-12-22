@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.data.account.Account
 import com.yusy.keykeeper.data.account.AppType
+import com.yusy.keykeeper.data.account.EncryptFunc
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -121,7 +122,7 @@ fun PreviewAccountCard() {
                 id = 0,
                 uid = "",
                 encryptedPasswd = "",
-                encryptFunc = "",
+                encryptFunc = EncryptFunc.fun1,
                 appType = AppType.AndroidAPP,
                 appName = "test",
                 appUrl = "com.yusy.test",
