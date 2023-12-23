@@ -29,14 +29,26 @@ enum class EncryptFunc {
     Fun1,
 }
 
-val accountExample = Account(
+val accountExampleAndroid = Account(
     id = 0,
     uid = "",
     encryptedPasswd = "",
     encryptFunc = EncryptFunc.Fun1,
     appType = AppType.AndroidAPP,
-    appName = "test",
+    appName = "test app",
     appUrl = "com.yusy.test",
     appIconPath = "",
-    createdAt = "2023/12/23"
+    createdAt = "2023/12/23 12:00:00"
+)
+
+val accountExampleWebsite = Account(
+    id = 0,
+    uid = "",
+    encryptedPasswd = "",
+    encryptFunc = EncryptFunc.Fun1,
+    appType = AppType.Website,
+    appName = "test website",
+    appUrl = "www.yusy.xyz",
+    appIconPath = "",
+    createdAt = "2023/12/23 12:00:00"
 )

@@ -25,7 +25,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yusy.keykeeper.data.account.accountExample
+import com.yusy.keykeeper.data.account.accountExampleAndroid
 import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
@@ -115,7 +115,7 @@ fun AccountCard(
 fun PreviewAccountCard() {
     KeyKeeperTheme {
         AccountCard(
-            accountExample.toAccountPreview(),
+            accountExampleAndroid.toAccountPreview(),
             onClick = {}
         )
     }

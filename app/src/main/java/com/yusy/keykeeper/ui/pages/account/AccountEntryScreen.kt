@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusy.keykeeper.R
+import com.yusy.keykeeper.data.account.accountExampleAndroid
+import com.yusy.keykeeper.data.account.accountExampleWebsite
 import com.yusy.keykeeper.ui.AppViewModelProvider
 import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.navigation.MyNavActions
@@ -107,10 +109,22 @@ fun AccountEntryBody(
 
 @Preview
 @Composable
-fun AccountEntryScreenPreview() {
+fun AccountEntryScreenPreview_Android() {
     KeyKeeperTheme {
         AccountEntryBody(
-            accountEntryUiState = AccountEntryUiState(),
+            accountEntryUiState = accountExampleAndroid.toAccountDetails().toAccountEntryUiState(true),
+            onSave = {},
+            onAccountValueChange = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun AccountEntryScreenPreview_Website() {
+    KeyKeeperTheme {
+        AccountEntryBody(
+            accountEntryUiState = accountExampleWebsite.toAccountDetails().toAccountEntryUiState(true),
             onSave = {},
             onAccountValueChange = {}
         )

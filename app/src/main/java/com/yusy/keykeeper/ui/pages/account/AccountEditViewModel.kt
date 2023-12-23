@@ -40,7 +40,7 @@ class AccountEditViewModel(
     suspend fun saveAccount() {
         if (validateInput()) {
             // time
-            val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+            val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             val account = accountEditUiState.accountDetails.toAccount()
             account.createdAt = formattedTime
 

@@ -25,4 +25,5 @@
     <string name="account_page_warning_urlempty_app">Please choose app!</string>
     <string name="account_page_warning_nameempty_web">Website name cannot stay empty!</string>
     <string name="account_page_warning_nameempty_app">App name cannot stay empty!</string>
+    <string name="account_page_createdat">"Created at  "</string>
 </resources>

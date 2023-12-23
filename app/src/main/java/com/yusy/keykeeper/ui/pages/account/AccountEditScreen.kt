@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusy.keykeeper.R
+import com.yusy.keykeeper.data.account.accountExampleAndroid
+import com.yusy.keykeeper.data.account.accountExampleWebsite
 import com.yusy.keykeeper.ui.AppViewModelProvider
 import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.navigation.MyNavActions
@@ -92,6 +94,13 @@ fun AccountEditBody(
         // input form
         EditInputForm(accountDetails = accountEditUiState.accountDetails, onValueChange = onAccountValueChange, modifier = modifier)
 
+        // created at
+        Text(
+            text = stringResource(R.string.account_page_createdat) + "  " + accountEditUiState.accountDetails.createdAt,
+            color = MaterialTheme.colorScheme.tertiary,
+            modifier = inputModifier
+        )
+
         // save button
         Button(
             shape = MaterialTheme.shapes.medium,
@@ -113,10 +122,22 @@ fun AccountEditBody(
 
 @Preview
 @Composable
-fun AccountEditScreenPreview() {
+fun AccountEditScreenPreview_Android() {
     KeyKeeperTheme {
         AccountEditBody(
-            accountEditUiState = AccountEditUiState(),
+            accountEditUiState = accountExampleAndroid.toAccountDetails().toAccountEditUiState(true),
+            onSave = {},
+            onAccountValueChange = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun AccountEditScreenPreview_Website() {
+    KeyKeeperTheme {
+        AccountEditBody(
+            accountEditUiState = accountExampleWebsite.toAccountDetails().toAccountEditUiState(true),
             onSave = {},
             onAccountValueChange = {}
         )

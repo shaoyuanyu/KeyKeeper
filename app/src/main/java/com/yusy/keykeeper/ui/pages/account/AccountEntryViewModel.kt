@@ -23,7 +23,7 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
     suspend fun saveAccount() {
         if (validateInput()) {
             // time
-            val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+            val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             val account = accountEntryUiState.accountDetails.toAccount()
             account.createdAt = formattedTime
 

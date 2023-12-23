@@ -25,4 +25,5 @@
     <string name="account_page_warning_urlempty_app">请选择应用(app)!</string>
     <string name="account_page_warning_nameempty_web">网站名不得为空!</string>
     <string name="account_page_warning_nameempty_app">应用名不得为空!</string>
+    <string name="account_page_createdat">"创建于  "</string>
 </resources>
