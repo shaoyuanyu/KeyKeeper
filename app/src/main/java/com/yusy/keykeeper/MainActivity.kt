@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import com.yusy.keykeeper.ui.MyContent
 
 class MainActivity: ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

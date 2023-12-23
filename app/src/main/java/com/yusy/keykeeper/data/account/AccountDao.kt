@@ -24,4 +24,7 @@ interface AccountDao {
 
     @Query("SELECT * from Account WHERE uid = :uid")
     fun getAccountByUid(uid: String): Flow<Account>
+
+    @Query("SELECT * from Account WHERE id = :id")
+    fun getAccountById(id: Int): Flow<Account>
 }

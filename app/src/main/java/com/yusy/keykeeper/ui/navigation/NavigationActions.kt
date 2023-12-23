@@ -70,11 +70,10 @@ class MyNavActions(private val navController: NavHostController) {
     }
 
     fun navigateTo(destination: MySecondLevelDestination) {
-        var routeString: String
-        if (destination.param.isEmpty()) {
-            routeString = destination.route
+        val routeString = if (destination.param.isEmpty()) {
+            destination.route
         } else {
-            routeString = destination.route + "/" + destination.param
+            destination.route + "/" + destination.param
         }
 
         navController.navigate(routeString) {
@@ -88,5 +87,9 @@ class MyNavActions(private val navController: NavHostController) {
             // Restore state when reselecting a previously selected item
             restoreState = true
         }
+    }
+
+    fun navigateBack() {
+        navController.navigateUp()
     }
 }
