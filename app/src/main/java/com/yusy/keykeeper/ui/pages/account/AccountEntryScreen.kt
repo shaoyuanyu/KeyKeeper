@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.ui.AppViewModelProvider
+import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
-import com.yusy.keykeeper.utils.getIconPainter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -78,7 +78,7 @@ fun AccountEntryBody(
 
             Image(
                 modifier = iconImgModifier,
-                painter = getIconPainter(path = accountEntryUiState.accountDetails.appIcon),
+                painter = iconPainter(appIcon = accountEntryUiState.accountDetails.appIcon),
                 contentDescription = "app icon",
             )
         }

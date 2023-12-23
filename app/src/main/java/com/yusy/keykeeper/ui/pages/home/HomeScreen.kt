@@ -104,11 +104,11 @@ fun HomeScreenPreview() {
             id = 0,
             uid = "",
             encryptedPasswd = "",
-            encryptFunc = EncryptFunc.fun1,
+            encryptFunc = EncryptFunc.Fun1,
             appType = AppType.AndroidAPP,
             appName = "test",
             appUrl = "com.yusy.test",
-            appIcon = "",
+            appIconPath = "",
             createdAt = "2023/12/23"
         ).toAccountPreview()
     }

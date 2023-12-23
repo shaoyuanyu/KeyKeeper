@@ -14,12 +14,9 @@ data class Account(
     var appType: AppType, // 应用类型
     var appName: String, // 应用名
     var appUrl: String, // 应用统一资源定位
-//    @DrawableRes var appIcon: Int = R.drawable.ic_launcher_foreground, // 应用图标
-    var appIcon: String = "", // 应用图标
+    var appIconPath: String = "", // 应用图标
     var createdAt: String, // 创建时间(最新)
-) {
-    ;
-}
+)
 
 enum class AppType {
     Unknown,
@@ -29,5 +26,17 @@ enum class AppType {
 }
 
 enum class EncryptFunc {
-    fun1,
+    Fun1,
 }
+
+val accountExample = Account(
+    id = 0,
+    uid = "",
+    encryptedPasswd = "",
+    encryptFunc = EncryptFunc.Fun1,
+    appType = AppType.AndroidAPP,
+    appName = "test",
+    appUrl = "com.yusy.test",
+    appIconPath = "",
+    createdAt = "2023/12/23"
+)

@@ -25,11 +25,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yusy.keykeeper.data.account.Account
-import com.yusy.keykeeper.data.account.AppType
-import com.yusy.keykeeper.data.account.EncryptFunc
+import com.yusy.keykeeper.data.account.accountExample
+import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
-import com.yusy.keykeeper.utils.getIconPainter
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +86,7 @@ fun AccountCard(
                         modifier = Modifier
                             .size(50.dp)
                             .clip(CircleShape),
-                        painter = getIconPainter(path = accountPreview.appIcon),
+                        painter = iconPainter(appIcon = accountPreview.appIcon),
                         contentDescription = "app icon",
                     )
                 }
@@ -117,17 +115,7 @@ fun AccountCard(
 fun PreviewAccountCard() {
     KeyKeeperTheme {
         AccountCard(
-            Account(
-                id = 0,
-                uid = "",
-                encryptedPasswd = "",
-                encryptFunc = EncryptFunc.fun1,
-                appType = AppType.AndroidAPP,
-                appName = "test",
-                appUrl = "com.yusy.test",
-                appIcon = "",
-                createdAt = "2023/11/16"
-            ).toAccountPreview(),
+            accountExample.toAccountPreview(),
             onClick = {}
         )
     }
