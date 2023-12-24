@@ -3,15 +3,20 @@ package com.yusy.keykeeper.ui.pages.account
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +43,10 @@ fun AppChooseScreen(
 
     AppChooseBody(
         appChooseUiState = viewModel.appChooseUiState,
+        onSearchValueChange = {
+            viewModel.updateAppChooseUiState(it)
+            viewModel.searchApp()
+        },
         onAppChoose = {
             viewModel.chooseApp(it)
             myNavActions.navigateBack()
@@ -49,14 +58,36 @@ fun AppChooseScreen(
 @Composable
 fun AppChooseBody(
     appChooseUiState: AppChooseUiState,
+    onSearchValueChange: (String) -> Unit,
     onAppChoose: (LocalDeskApp) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier) {
+    Column(modifier = modifier) {
+        val inputModifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+
+        OutlinedTextField(
+            modifier = inputModifier,
+            value = appChooseUiState.targetName,
+            onValueChange = {
+                onSearchValueChange(it)
+            },
+            label = { Row { Text("搜索本地App") } },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            trailingIcon = {
+                if (appChooseUiState.isReadingLocalDeskApp) {
+                    CircularProgressIndicator()
+                }
+            },
+            singleLine = true,
+        )
+
         LazyColumn(
             modifier = modifier,
         ) {
-            items(appChooseUiState.localDeskAppList) {
+            items(appChooseUiState.targetAppList) {
                 AppCard(
                     localDeskApp = it,
                     onClick = { onAppChoose(it) },

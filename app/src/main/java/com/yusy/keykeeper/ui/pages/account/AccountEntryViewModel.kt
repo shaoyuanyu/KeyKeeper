@@ -31,10 +31,6 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
         )
     }
 
-    fun setLoadingLocalDeskAppStatus(status: Boolean) {
-        accountEntryUiState.isReadingLocalDeskApp = status
-    }
-
     fun generateSecurePasswd() {
         updateAccountEntryUiState(accountEntryUiState.accountDetails.copy(plainPasswd = generatePasswd()))
     }
@@ -71,10 +67,17 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
     var appChooseUiState by mutableStateOf(AppChooseUiState())
         private set
 
-    private fun updateAppChooseUiState(localDeskAppList: List<LocalDeskApp>) {
+    fun updateAppChooseUiState(targetName: String) {
         appChooseUiState = AppChooseUiState(
-            localDeskAppList = localDeskAppList
+            localDeskAppList = appChooseUiState.localDeskAppList,
+            targetAppList = appChooseUiState.targetAppList,
+            targetName = targetName
         )
+    }
+
+    fun setLoadingLocalDeskAppStatus(status: Boolean) {
+        accountEntryUiState.isReadingLocalDeskApp = status
+        appChooseUiState.isReadingLocalDeskApp = status
     }
 
     /**
@@ -104,11 +107,28 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
             }
 
             //
-            updateAppChooseUiState(appList.toList())
+            appChooseUiState = AppChooseUiState(
+                localDeskAppList = appList.toList(),
+                targetAppList = appList.toList()
+            )
 
             // 结束加载状态
             setLoadingLocalDeskAppStatus(false)
         }
+    }
+
+    fun searchApp() {
+        setLoadingLocalDeskAppStatus(true)
+
+        val targetAppArrayList = arrayListOf<LocalDeskApp>()
+        for (localDeskApp in appChooseUiState.localDeskAppList) {
+            if (localDeskApp.appName.contains(appChooseUiState.targetName)) {
+                targetAppArrayList.add(localDeskApp)
+            }
+        }
+        appChooseUiState.targetAppList = targetAppArrayList.toList()
+
+        setLoadingLocalDeskAppStatus(false)
     }
 
     /**
@@ -144,5 +164,8 @@ data class LocalDeskApp (
 )
 
 data class AppChooseUiState(
-    val localDeskAppList: List<LocalDeskApp> = listOf()
+    val localDeskAppList: List<LocalDeskApp> = listOf(),
+    var targetAppList: List<LocalDeskApp> = listOf(),
+    var targetName: String = "",
+    var isReadingLocalDeskApp: Boolean = false
 )
