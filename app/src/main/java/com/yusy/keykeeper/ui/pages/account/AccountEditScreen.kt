@@ -72,6 +72,14 @@ fun AccountEditScreen(
                 Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
         },
+        onDelete = {
+            coroutineScope.launch {
+                viewModel.deleteAccount()
+                myNavActions.navigateBack()
+                // TODO:弹窗文本本地化
+                Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show()
+            }
+        },
         modifier = modifier
     )
 }
@@ -82,6 +90,7 @@ fun AccountEditBody(
     onAccountValueChange: (AccountDetails) -> Unit,
     onGeneratePasswd: () -> Unit,
     onSave: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -151,9 +160,7 @@ fun AccountEditBody(
         // delete button
         Button(
             shape = MaterialTheme.shapes.medium,
-            onClick = {
-
-            },
+            onClick = { onDelete() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
                 contentColor = MaterialTheme.colorScheme.error
@@ -345,6 +352,7 @@ fun AccountEditScreenPreview_Android() {
             accountEditUiState = accountExampleAndroid.toAccountDetails().toAccountEditUiState(true),
             onAccountValueChange = {},
             onGeneratePasswd = {},
+            onDelete = {},
             onSave = {}
         )
     }
@@ -358,6 +366,7 @@ fun AccountEditScreenPreview_Website() {
             accountEditUiState = accountExampleWebsite.toAccountDetails().toAccountEditUiState(true),
             onAccountValueChange = {},
             onGeneratePasswd = {},
+            onDelete = {},
             onSave = {}
         )
     }

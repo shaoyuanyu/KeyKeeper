@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yusy.keykeeper.data.account.Account
 import com.yusy.keykeeper.data.account.AccountsRepository
 import com.yusy.keykeeper.utils.generatePasswd
 import kotlinx.coroutines.flow.first
@@ -18,14 +19,19 @@ class AccountEditViewModel(
     var accountEditUiState by mutableStateOf(AccountEditUiState())
         private set
 
+    // 用于删除
+    private lateinit var accountToDelete: Account
+
     private var id: Int? = null
 
     fun setId(id: Int) {
         this.id = id
 
         viewModelScope.launch {
-            accountEditUiState = accountsRepository.getAccountStreamById(id)
+            accountToDelete = accountsRepository.getAccountStreamById(id)
                 .first()
+
+            accountEditUiState = accountToDelete
                 .toAccountDetails()
                 .toAccountEditUiState(true)
         }
@@ -51,7 +57,14 @@ class AccountEditViewModel(
 
             //
             accountsRepository.updateAccount(account)
+
+            // 更新accountToDelete
+            accountToDelete = account
         }
+    }
+
+    suspend fun deleteAccount() {
+        accountsRepository.deleteAccount(accountToDelete)
     }
 
     // appName和plainPasswd不可为空
