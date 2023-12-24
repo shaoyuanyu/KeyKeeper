@@ -32,7 +32,7 @@ enum class EncryptFunc {
 val accountExampleAndroid = Account(
     id = 0,
     uid = "",
-    encryptedPasswd = "",
+    encryptedPasswd = "123456",
     encryptFunc = EncryptFunc.Fun1,
     appType = AppType.AndroidAPP,
     appName = "test app",
@@ -44,7 +44,7 @@ val accountExampleAndroid = Account(
 val accountExampleWebsite = Account(
     id = 0,
     uid = "",
-    encryptedPasswd = "",
+    encryptedPasswd = "123456",
     encryptFunc = EncryptFunc.Fun1,
     appType = AppType.Website,
     appName = "test website",

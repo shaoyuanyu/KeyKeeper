@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.data.account.AppType
@@ -110,7 +115,7 @@ fun AccountEditBody(
         Text(
             text = stringResource(R.string.account_page_createdat) + "  " + accountEditUiState.accountDetails.createdAt,
             color = MaterialTheme.colorScheme.tertiary,
-            modifier = inputModifier
+            modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 5.dp)
         )
 
         // save button
@@ -124,11 +129,69 @@ fun AccountEditBody(
             },
             modifier = inputModifier
         ) {
-            Text(text = stringResource(R.string.account_page_save))
+            Icon(
+                painter = painterResource(id = R.drawable.ic_save),
+                contentDescription = null
+            )
+            Text(
+                text = stringResource(R.string.account_page_save),
+                fontSize = 14.sp
+            )
         }
 
-        // hint text
-        // TODO:增加提示词，如：密码不得为空
+        // delete button
+        Button(
+            shape = MaterialTheme.shapes.medium,
+            onClick = {
+
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.error
+            ),
+            modifier = inputModifier
+        ) {
+            Icon(Icons.Default.Delete, contentDescription = null)
+            Text(
+                text = stringResource(R.string.account_page_delete),
+                fontSize = 14.sp
+            )
+        }
+
+        // 提示词 - 比如密码不得为空
+        // TODO:文本本地化
+        val hintTextModifier = Modifier
+            .padding(horizontal = 20.dp)
+            .align(Alignment.End)
+        Row(modifier = hintTextModifier) {
+            Icon(
+                imageVector = if (accountEditUiState.isValid) {
+                    Icons.Default.Check
+                } else {
+                    Icons.Default.Warning
+                },
+                tint = if (accountEditUiState.isValid) {
+                    MaterialTheme.colorScheme.tertiary
+                } else {
+                    MaterialTheme.colorScheme.error
+                },
+                contentDescription = ""
+            )
+            Text(
+                text = if (accountEditUiState.accountDetails.plainPasswd.isEmpty()) {
+                    "密码不得为空"
+                } else if (accountEditUiState.accountDetails.appName.isEmpty()) {
+                    "应用名不得为空"
+                } else {
+                    "数据校验成功"
+                },
+                color = if (accountEditUiState.isValid) {
+                    MaterialTheme.colorScheme.tertiary
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+            )
+        }
     }
 }
 

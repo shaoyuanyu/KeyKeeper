@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -129,11 +131,48 @@ fun AccountEntryBody(
             },
             modifier = inputModifier
         ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_save),
+                contentDescription = null
+            )
+
             Text(text = stringResource(R.string.account_page_save))
         }
 
-        // hint text
-        // TODO:增加提示词，如：密码不得为空
+        // 提示词 - 比如密码不得为空
+        // TODO:文本本地化
+        val hintTextModifier = Modifier
+            .padding(horizontal = 20.dp)
+            .align(Alignment.End)
+        Row(modifier = hintTextModifier) {
+            Icon(
+                imageVector = if (accountEntryUiState.isValid) {
+                    Icons.Default.Check
+                } else {
+                    Icons.Default.Warning
+                },
+                tint = if (accountEntryUiState.isValid) {
+                    MaterialTheme.colorScheme.tertiary
+                } else {
+                    MaterialTheme.colorScheme.error
+                },
+                contentDescription = ""
+            )
+            Text(
+                text = if (accountEntryUiState.accountDetails.plainPasswd.isEmpty()) {
+                    "密码不得为空"
+                } else if (accountEntryUiState.accountDetails.appName.isEmpty()) {
+                    "应用名不得为空"
+                } else {
+                    "数据校验成功"
+                },
+                color = if (accountEntryUiState.isValid) {
+                    MaterialTheme.colorScheme.tertiary
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+            )
+        }
     }
 }
 
