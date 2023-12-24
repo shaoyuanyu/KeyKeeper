@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import com.yusy.keykeeper.data.account.AccountsRepository
+import com.yusy.keykeeper.utils.storeIcon
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -26,12 +27,21 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
         )
     }
 
-    suspend fun saveAccount() {
+    suspend fun saveAccount(context: Context) {
         if (validateInput()) {
+            val account = accountEntryUiState.accountDetails.toAccount()
+            val accountIcon = accountEntryUiState.accountDetails.appIcon!!
+
             // time
             val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val account = accountEntryUiState.accountDetails.toAccount()
             account.createdAt = formattedTime
+
+            // icon
+            account.appIconPath = storeIcon(
+                context = context,
+                iconName = account.appUrl,
+                iconImageBitmap = accountIcon
+            )
 
             //
             accountsRepository.insertAccount(account)
@@ -76,6 +86,7 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
                     appIcon = info.loadIcon(context.packageManager).toBitmap().asImageBitmap()
                 )
             )
+
         }
 
         updateAppChooseUiState(appList.toList())

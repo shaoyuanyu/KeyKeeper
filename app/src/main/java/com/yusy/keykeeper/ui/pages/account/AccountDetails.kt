@@ -18,7 +18,7 @@ data class AccountDetails(
     var appName: String = "",
     var appUrl: String = "",
     var appIconPath: String = "",
-    var appIcon: ImageBitmap? = getIconImageBitmap(""),
+    var appIcon: ImageBitmap? = null,
     var createdAt: String = "",
 )
 

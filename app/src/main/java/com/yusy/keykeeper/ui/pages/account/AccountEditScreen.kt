@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,8 +23,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -87,16 +87,18 @@ fun AccountEditBody(
             modifier = modifier
                 .fillMaxWidth()
                 .height(150.dp)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.tertiaryContainer)
         ) {
             val iconImgModifier = modifier
-                .size(150.dp)
-                .clip(CircleShape)
+                .size(120.dp)
                 .align(Alignment.Center)
 
             Image(
                 modifier = iconImgModifier,
-                painter = iconPainter(appIcon = accountEditUiState.accountDetails.appIcon),
+                painter = iconPainter(
+                    appType = accountEditUiState.accountDetails.appType,
+                    appIcon = accountEditUiState.accountDetails.appIcon
+                ),
                 contentDescription = "app icon",
             )
         }
@@ -146,6 +148,10 @@ fun EditInputForm(
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .align(Alignment.CenterHorizontally)
 
+        val hintTextModifier = Modifier
+            .padding(horizontal = 20.dp)
+            .align(Alignment.End)
+
         // account id
         // readonly
         OutlinedTextField(
@@ -170,8 +176,31 @@ fun EditInputForm(
                 Text( color = MaterialTheme.colorScheme.error, text = "*")
             } },
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+            trailingIcon = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
+                }
+            },
             singleLine = true,
         )
+
+        // 提示 - 点击图标生成可靠密码
+        // TODO:文本本地化
+        Row(modifier = hintTextModifier) {
+            Text(
+                text = "点击",
+                color = MaterialTheme.colorScheme.tertiary
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_infinity),
+                tint = MaterialTheme.colorScheme.tertiary,
+                contentDescription = ""
+            )
+            Text(
+                text = "生成可靠密码",
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        }
 
         // appUrl & appName
         with (accountDetails) {

@@ -2,7 +2,6 @@ package com.yusy.keykeeper.ui.components.accountcard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,11 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +31,7 @@ import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 fun AccountCard(
     accountPreview: AccountPreview,
     isSelected: Boolean = false,
-    isOpened: Boolean = false,
+    isOpened: Boolean = true,
     onClick: () -> Unit
 ) {
     Card(
@@ -75,21 +72,15 @@ fun AccountCard(
                         color = MaterialTheme.colorScheme.outline
                     )
                 }
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape),
-                        painter = iconPainter(appIcon = accountPreview.appIcon),
-                        contentDescription = "app icon",
-                    )
-                }
+
+                Image(
+                    modifier = Modifier.size(50.dp),
+                    painter = iconPainter(
+                        appType = accountPreview.appType,
+                        appIcon = accountPreview.appIcon
+                    ),
+                    contentDescription = "app icon",
+                )
             }
 
             Text(

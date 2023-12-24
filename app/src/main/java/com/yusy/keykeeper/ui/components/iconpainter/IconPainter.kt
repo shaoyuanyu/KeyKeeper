@@ -6,12 +6,23 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.yusy.keykeeper.R
+import com.yusy.keykeeper.data.account.AppType
 
 @Composable
-fun iconPainter(appIcon: ImageBitmap?): Painter {
+fun iconPainter(appIcon: ImageBitmap?, appType: AppType): Painter {
     return if (appIcon != null) {
         BitmapPainter(appIcon)
     } else {
-        painterResource(id = R.drawable.ic_launcher_foreground)
+        when (appType) {
+            AppType.Website -> {
+                painterResource(id = R.drawable.ic_website)
+            }
+            AppType.AndroidAPP, AppType.HmAPP -> {
+                painterResource(id = R.drawable.ic_launcher_foreground)
+            }
+            else -> {
+                painterResource(id = R.drawable.ic_launcher_foreground)
+            }
+        }
     }
 }

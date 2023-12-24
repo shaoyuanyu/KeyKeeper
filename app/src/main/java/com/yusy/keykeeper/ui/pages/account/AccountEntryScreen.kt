@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +57,7 @@ fun AccountEntryScreen(
         onAccountValueChange = viewModel::updateAccountEntryUiState,
         onSave = {
             coroutineScope.launch {
-                viewModel.saveAccount()
+                viewModel.saveAccount(context)
                 myNavActions.navigateBack()
                 // TODO:弹窗文本本地化
                 Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
@@ -96,16 +94,18 @@ fun AccountEntryBody(
             modifier = modifier
                 .fillMaxWidth()
                 .height(150.dp)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.tertiaryContainer)
         ) {
             val iconImgModifier = modifier
-                .size(150.dp)
-                .clip(CircleShape)
+                .size(120.dp)
                 .align(Alignment.Center)
 
             Image(
                 modifier = iconImgModifier,
-                painter = iconPainter(appIcon = accountEntryUiState.accountDetails.appIcon),
+                painter = iconPainter(
+                    appType = accountEntryUiState.accountDetails.appType,
+                    appIcon = accountEntryUiState.accountDetails.appIcon
+                ),
                 contentDescription = "app icon",
             )
         }
@@ -182,7 +182,6 @@ fun EntryInputForm(
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
             trailingIcon = {
                IconButton(onClick = { /*TODO*/ }) {
-//                   Icon(Icons.Default.Face, contentDescription = "")
                    Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
                }
             },
@@ -190,6 +189,7 @@ fun EntryInputForm(
         )
 
         // 提示 - 点击图标生成可靠密码
+        // TODO:文本本地化
         Row(modifier = hintTextModifier) {
             Text(
                 text = "点击",
@@ -274,6 +274,7 @@ fun EntryInputForm(
                 )
 
                 // 提示 - 点击图标在本地app中选择
+                // TODO:文本本地化
                 Row(modifier = hintTextModifier) {
                     Text(
                         text = "点击",

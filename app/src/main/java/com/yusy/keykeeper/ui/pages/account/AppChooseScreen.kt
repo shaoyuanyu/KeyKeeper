@@ -1,7 +1,6 @@
 package com.yusy.keykeeper.ui.pages.account
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,17 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yusy.keykeeper.data.account.AppType
 import com.yusy.keykeeper.ui.AppViewModelProvider
 import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.navigation.MyNavActions
@@ -80,27 +77,20 @@ fun AppCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(10.dp)
-//            .background(MaterialTheme.colorScheme.tertiaryContainer)
             .clickable(
                 enabled = true,
                 onClick = onClick
             )
     ) {
-        IconButton(
-            onClick = { },
+        Image(
             modifier = modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-        ) {
-            Image(
-                modifier = modifier
-                    .size(50.dp)
-                    .clip(CircleShape),
-                painter = iconPainter(appIcon = localDeskApp.appIcon),
-                contentDescription = "app icon",
-            )
-        }
+                .size(50.dp),
+            painter = iconPainter(
+                appType = AppType.AndroidAPP,
+                appIcon = localDeskApp.appIcon
+            ),
+            contentDescription = "app icon",
+        )
 
         Column(
             modifier = modifier
