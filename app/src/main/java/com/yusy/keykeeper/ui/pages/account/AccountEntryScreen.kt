@@ -3,6 +3,7 @@ package com.yusy.keykeeper.ui.pages.account
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -25,8 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -152,6 +154,10 @@ fun EntryInputForm(
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .align(Alignment.CenterHorizontally)
 
+        val hintTextModifier = Modifier
+            .padding(horizontal = 20.dp)
+            .align(Alignment.End)
+
         // account id
         OutlinedTextField(
             modifier = inputModifier,
@@ -174,8 +180,31 @@ fun EntryInputForm(
                 Text( color = MaterialTheme.colorScheme.error, text = "*")
             } },
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+            trailingIcon = {
+               IconButton(onClick = { /*TODO*/ }) {
+//                   Icon(Icons.Default.Face, contentDescription = "")
+                   Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
+               }
+            },
             singleLine = true,
         )
+
+        // 提示 - 点击图标生成可靠密码
+        Row(modifier = hintTextModifier) {
+            Text(
+                text = "点击",
+                color = MaterialTheme.colorScheme.tertiary
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_infinity),
+                tint = MaterialTheme.colorScheme.tertiary,
+                contentDescription = ""
+            )
+            Text(
+                text = "生成可靠密码",
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        }
 
         // choose app type
         Row(modifier.selectableGroup()) {
@@ -196,7 +225,12 @@ fun EntryInputForm(
                         selected = (appType == AppType.Website),
                         onClick = { onValueChange(accountDetails.copy(appType = AppType.Website)) },
                     )
-                    Text(modifier = choiceModifier, text = stringResource(R.string.account_page_website))
+                    Text(
+                        modifier = choiceModifier.clickable {
+                            onValueChange(accountDetails.copy(appType = AppType.Website))
+                        },
+                        text = stringResource(R.string.account_page_website)
+                    )
                 }
 
                 // app
@@ -206,7 +240,12 @@ fun EntryInputForm(
                         selected = (appType == AppType.AndroidAPP),
                         onClick = { onValueChange(accountDetails.copy(appType = AppType.AndroidAPP)) },
                     )
-                    Text(modifier = choiceModifier, text = stringResource(R.string.account_page_app))
+                    Text(
+                        modifier = choiceModifier.clickable {
+                            onValueChange(accountDetails.copy(appType = AppType.AndroidAPP))
+                        },
+                        text = stringResource(R.string.account_page_app)
+                    )
                 }
             }
         }
@@ -217,20 +256,39 @@ fun EntryInputForm(
                 // appUrl - app
                 // TODO:增加APP选择页面，点击输出框后切出，同时输出框上滑至页面顶端，可用于输入关键词搜索APP
                 OutlinedTextField(
-                    modifier = inputModifier
-                        .onFocusChanged {
-                            if (it.isFocused) {
-                                onAppChoose()
-                            }
-                        },
+                    modifier = inputModifier,
                     value = accountDetails.appUrl,
                     onValueChange = { onValueChange(accountDetails.copy(appUrl = it)) },
                     label = { Row {
                         Text(stringResource(R.string.account_page_appurl))
                     } },
                     leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appurl)) },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { onAppChoose() }
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = stringResource(R.string.account_page_chooseapp))
+                        }
+                    },
                     singleLine = true,
                 )
+
+                // 提示 - 点击图标在本地app中选择
+                Row(modifier = hintTextModifier) {
+                    Text(
+                        text = "点击",
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_screen_search_desktop),
+                        tint = MaterialTheme.colorScheme.tertiary,
+                        contentDescription = stringResource(R.string.account_page_chooseapp)
+                    )
+                    Text(
+                        text = "在本地app中选择",
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
 
                 // appName - app
                 OutlinedTextField(
