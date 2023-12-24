@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import com.yusy.keykeeper.data.account.AccountsRepository
+import com.yusy.keykeeper.utils.generatePasswd
 import com.yusy.keykeeper.utils.storeIcon
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,6 +26,10 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
             accountDetails = accountDetails,
             isValid = validateInput(accountDetails)
         )
+    }
+
+    fun generateSecurePasswd() {
+        updateAccountEntryUiState(accountEntryUiState.accountDetails.copy(plainPasswd = generatePasswd()))
     }
 
     suspend fun saveAccount(context: Context) {

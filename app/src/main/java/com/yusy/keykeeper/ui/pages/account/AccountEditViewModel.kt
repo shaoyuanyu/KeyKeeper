@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yusy.keykeeper.data.account.AccountsRepository
+import com.yusy.keykeeper.utils.generatePasswd
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -30,11 +31,15 @@ class AccountEditViewModel(
         }
     }
 
-    fun updateUiState(accountDetails: AccountDetails) {
+    fun updateAccountEditUiState(accountDetails: AccountDetails) {
         accountEditUiState = AccountEditUiState(
             accountDetails = accountDetails,
             isValid = validateInput(accountDetails)
         )
+    }
+
+    fun generateSecurePasswd() {
+        updateAccountEditUiState(accountEditUiState.accountDetails.copy(plainPasswd = generatePasswd()))
     }
 
     suspend fun saveAccount() {

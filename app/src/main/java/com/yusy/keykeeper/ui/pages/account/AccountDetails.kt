@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.yusy.keykeeper.data.account.Account
 import com.yusy.keykeeper.data.account.AppType
 import com.yusy.keykeeper.data.account.EncryptFunc
-import com.yusy.keykeeper.utils.decrypt
-import com.yusy.keykeeper.utils.encrypt
+import com.yusy.keykeeper.utils.decryptPasswd
+import com.yusy.keykeeper.utils.encryptPasswd
 import com.yusy.keykeeper.utils.getIconImageBitmap
 
 data class AccountDetails(
@@ -25,7 +25,7 @@ data class AccountDetails(
 fun AccountDetails.toAccount(): Account = Account(
     id = id,
     uid = uid,
-    encryptedPasswd = encrypt(plainPasswd, encryptFunc),
+    encryptedPasswd = encryptPasswd(plainPasswd, encryptFunc),
     encryptFunc = encryptFunc,
     appType = appType,
     appName = appName,
@@ -37,7 +37,7 @@ fun AccountDetails.toAccount(): Account = Account(
 fun Account.toAccountDetails(): AccountDetails = AccountDetails(
     id = id,
     uid = uid,
-    plainPasswd = decrypt(encryptedPasswd, encryptFunc),
+    plainPasswd = decryptPasswd(encryptedPasswd, encryptFunc),
     encryptFunc = encryptFunc,
     appType = appType,
     appName = appName,

@@ -65,6 +65,9 @@ fun AccountEntryScreen(
                 Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
         },
+        onGeneratePasswd = {
+            viewModel.generateSecurePasswd()
+        },
         onAppChoose = {
             myNavActions.navigateToChild(
                 MySecondLevelDestination(
@@ -80,6 +83,7 @@ fun AccountEntryScreen(
 fun AccountEntryBody(
     accountEntryUiState: AccountEntryUiState,
     onAccountValueChange: (AccountDetails) -> Unit,
+    onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
@@ -116,6 +120,7 @@ fun AccountEntryBody(
         EntryInputForm(
             accountDetails = accountEntryUiState.accountDetails,
             onValueChange = onAccountValueChange,
+            onGeneratePasswd = onGeneratePasswd,
             onAppChoose = onAppChoose,
             modifier = modifier
         )
@@ -183,6 +188,7 @@ fun AccountEntryBody(
 fun EntryInputForm(
     accountDetails: AccountDetails,
     onValueChange: (AccountDetails) -> Unit,
+    onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -220,7 +226,7 @@ fun EntryInputForm(
             } },
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
             trailingIcon = {
-               IconButton(onClick = { /*TODO*/ }) {
+               IconButton(onClick = onGeneratePasswd) {
                    Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
                }
             },
@@ -380,6 +386,7 @@ fun AccountEntryScreenPreview_Android() {
         AccountEntryBody(
             accountEntryUiState = accountExampleAndroid.toAccountDetails().toAccountEntryUiState(true),
             onAccountValueChange = {},
+            onGeneratePasswd = {},
             onAppChoose = {},
             onSave = {}
         )
@@ -393,6 +400,7 @@ fun AccountEntryScreenPreview_Website() {
         AccountEntryBody(
             accountEntryUiState = accountExampleWebsite.toAccountDetails().toAccountEntryUiState(true),
             onAccountValueChange = {},
+            onGeneratePasswd = {},
             onAppChoose = {},
             onSave = {}
         )

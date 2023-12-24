@@ -60,7 +60,10 @@ fun AccountEditScreen(
 
     AccountEditBody(
         accountEditUiState = viewModel.accountEditUiState,
-        onAccountValueChange = viewModel::updateUiState,
+        onAccountValueChange = viewModel::updateAccountEditUiState,
+        onGeneratePasswd = {
+            viewModel.generateSecurePasswd()
+        },
         onSave = {
             coroutineScope.launch {
                 viewModel.saveAccount()
@@ -77,6 +80,7 @@ fun AccountEditScreen(
 fun AccountEditBody(
     accountEditUiState: AccountEditUiState,
     onAccountValueChange: (AccountDetails) -> Unit,
+    onGeneratePasswd: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -109,7 +113,12 @@ fun AccountEditBody(
         }
 
         // input form
-        EditInputForm(accountDetails = accountEditUiState.accountDetails, onValueChange = onAccountValueChange, modifier = modifier)
+        EditInputForm(
+            accountDetails = accountEditUiState.accountDetails,
+            onGeneratePasswd = onGeneratePasswd,
+            onValueChange = onAccountValueChange,
+            modifier = modifier
+        )
 
         // created at
         Text(
@@ -202,6 +211,7 @@ fun AccountEditBody(
 fun EditInputForm(
     accountDetails: AccountDetails,
     onValueChange: (AccountDetails) -> Unit,
+    onGeneratePasswd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -240,7 +250,7 @@ fun EditInputForm(
             } },
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
             trailingIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onGeneratePasswd) {
                     Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
                 }
             },
@@ -333,8 +343,9 @@ fun AccountEditScreenPreview_Android() {
     KeyKeeperTheme {
         AccountEditBody(
             accountEditUiState = accountExampleAndroid.toAccountDetails().toAccountEditUiState(true),
-            onSave = {},
-            onAccountValueChange = {}
+            onAccountValueChange = {},
+            onGeneratePasswd = {},
+            onSave = {}
         )
     }
 }
@@ -345,8 +356,9 @@ fun AccountEditScreenPreview_Website() {
     KeyKeeperTheme {
         AccountEditBody(
             accountEditUiState = accountExampleWebsite.toAccountDetails().toAccountEditUiState(true),
-            onSave = {},
-            onAccountValueChange = {}
+            onAccountValueChange = {},
+            onGeneratePasswd = {},
+            onSave = {}
         )
     }
 }
