@@ -117,12 +117,17 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
         }
     }
 
+    /**
+     * 搜索app
+     */
     fun searchApp() {
         setLoadingLocalDeskAppStatus(true)
 
+        val targetNameFormatted = appChooseUiState.targetName.lowercase()
+
         val targetAppArrayList = arrayListOf<LocalDeskApp>()
         for (localDeskApp in appChooseUiState.localDeskAppList) {
-            if (localDeskApp.appName.contains(appChooseUiState.targetName)) {
+            if (localDeskApp.appName.lowercase().contains(targetNameFormatted) || localDeskApp.packageName.lowercase().contains(targetNameFormatted)) {
                 targetAppArrayList.add(localDeskApp)
             }
         }
