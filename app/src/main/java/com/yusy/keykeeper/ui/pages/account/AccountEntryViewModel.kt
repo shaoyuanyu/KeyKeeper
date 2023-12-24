@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModel
 import com.yusy.keykeeper.data.account.AccountsRepository
 import com.yusy.keykeeper.utils.generatePasswd
 import com.yusy.keykeeper.utils.storeIcon
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -26,6 +29,10 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
             accountDetails = accountDetails,
             isValid = validateInput(accountDetails)
         )
+    }
+
+    fun setLoadingLocalDeskAppStatus(status: Boolean) {
+        accountEntryUiState.isReadingLocalDeskApp = status
     }
 
     fun generateSecurePasswd() {
@@ -73,6 +80,7 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
     /**
      * 获取桌面APP列表
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun getDeskAppList(context: Context) {
         val appList: ArrayList<LocalDeskApp> = arrayListOf()
 
@@ -80,21 +88,27 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
         intent.setAction(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        //set MATCH_ALL to prevent any filtering of the results
-        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+        GlobalScope.launch {
+            // 获取package信息
+            val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
 
-        for (info in resolveInfoList) {
-            appList.add(
-                LocalDeskApp(
-                    appName = info.loadLabel(context.packageManager).toString(),
-                    packageName = info.activityInfo.packageName,
-                    appIcon = info.loadIcon(context.packageManager).toBitmap().asImageBitmap()
+            for (info in resolveInfoList) {
+                appList.add(
+                    LocalDeskApp(
+                        appName = info.loadLabel(context.packageManager).toString(),
+                        packageName = info.activityInfo.packageName,
+                        appIcon = info.loadIcon(context.packageManager).toBitmap().asImageBitmap()
+                    )
                 )
-            )
 
+            }
+
+            //
+            updateAppChooseUiState(appList.toList())
+
+            // 结束加载状态
+            setLoadingLocalDeskAppStatus(false)
         }
-
-        updateAppChooseUiState(appList.toList())
     }
 
     /**
@@ -113,11 +127,13 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
 
 data class AccountEntryUiState(
     val accountDetails: AccountDetails = AccountDetails(),
+    var isReadingLocalDeskApp: Boolean = false,
     val isValid: Boolean = false
 )
 
 fun AccountDetails.toAccountEntryUiState(isValid: Boolean): AccountEntryUiState = AccountEntryUiState(
     accountDetails = this,
+    isReadingLocalDeskApp = false,
     isValid = isValid
 )
 

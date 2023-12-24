@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -69,6 +70,10 @@ fun AccountEntryScreen(
             viewModel.generateSecurePasswd()
         },
         onAppChoose = {
+            // 启动加载状态
+            // 此状态在AppChooseScreen完成getDeskAppList()后结束
+            viewModel.setLoadingLocalDeskAppStatus(true)
+
             myNavActions.navigateToChild(
                 MySecondLevelDestination(
                     route = MyRoutes.APP_CHOOSE_PAGE
@@ -119,6 +124,7 @@ fun AccountEntryBody(
         // input form
         EntryInputForm(
             accountDetails = accountEntryUiState.accountDetails,
+            accountEntryUiState = accountEntryUiState,
             onValueChange = onAccountValueChange,
             onGeneratePasswd = onGeneratePasswd,
             onAppChoose = onAppChoose,
@@ -187,6 +193,7 @@ fun AccountEntryBody(
 @Composable
 fun EntryInputForm(
     accountDetails: AccountDetails,
+    accountEntryUiState: AccountEntryUiState,
     onValueChange: (AccountDetails) -> Unit,
     onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
@@ -309,10 +316,12 @@ fun EntryInputForm(
                     } },
                     leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appurl)) },
                     trailingIcon = {
-                        IconButton(
-                            onClick = { onAppChoose() }
-                        ) {
-                            Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = stringResource(R.string.account_page_chooseapp))
+                        IconButton(onClick = { onAppChoose() }) {
+                            if (!accountEntryUiState.isReadingLocalDeskApp) {
+                                Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = stringResource(R.string.account_page_chooseapp))
+                            } else {
+                                CircularProgressIndicator()
+                            }
                         }
                     },
                     singleLine = true,
