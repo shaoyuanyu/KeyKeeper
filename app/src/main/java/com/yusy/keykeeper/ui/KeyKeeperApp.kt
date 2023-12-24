@@ -21,6 +21,7 @@ import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.navigation.NavigationBarUI
 import com.yusy.keykeeper.ui.pages.account.AccountEditScreen
 import com.yusy.keykeeper.ui.pages.account.AccountEntryScreen
+import com.yusy.keykeeper.ui.pages.account.AppChooseScreen
 import com.yusy.keykeeper.ui.pages.home.HomeScreen
 import com.yusy.keykeeper.ui.pages.mine.MineUI
 import com.yusy.keykeeper.ui.pages.search.SearchUI
@@ -51,7 +52,6 @@ fun MyContent() {
                         .weight(1f),
                     myNavController = myNavController,
                     myNavActions = myNavActions
-//                    innerPadding = PaddingValues(8.dp)
                 )
 
                 AnimatedVisibility(visible = true) {
@@ -70,7 +70,6 @@ fun MyNavHost(
     modifier: Modifier = Modifier,
     myNavController: NavHostController,
     myNavActions: MyNavActions
-//    innerPadding: PaddingValues
 ) {
     NavHost(
         modifier = modifier,
@@ -81,9 +80,11 @@ fun MyNavHost(
         composable(MyRoutes.HOME) {
             HomeScreen(myNavActions = myNavActions)
         }
+
         composable(MyRoutes.SEARCH) {
             SearchUI()
         }
+
         composable(MyRoutes.MINE) {
             MineUI()
         }
@@ -92,19 +93,23 @@ fun MyNavHost(
         composable(MyRoutes.SETTING) {
             SettingUI()
         }
+
         composable(MyRoutes.ACCOUNT_CREATE_PAGE) {
             AccountEntryScreen(myNavActions = myNavActions)
         }
+
         composable(
             MyRoutes.ACCOUNT_EDIT_PAGE + "/{given_id}",
             arguments = listOf(navArgument("given_id") { type = NavType.StringType })
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("given_id").toString().toInt()
-
             AccountEditScreen(
                 myNavActions = myNavActions,
-                id = id
+                id = backStackEntry.arguments?.getString("given_id").toString().toInt()
             )
+        }
+
+        composable(MyRoutes.APP_CHOOSE_PAGE) {
+            AppChooseScreen(myNavActions = myNavActions)
         }
     }
 }

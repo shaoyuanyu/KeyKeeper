@@ -1,5 +1,6 @@
 package com.yusy.keykeeper.ui.pages.account
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ fun AccountEditScreen(
     viewModel: AccountEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.setId(id)
@@ -51,7 +54,8 @@ fun AccountEditScreen(
             coroutineScope.launch {
                 viewModel.saveAccount()
                 myNavActions.navigateBack()
-                // TODO:底部弹窗提示
+                // TODO:弹窗文本本地化
+                Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
         },
         modifier = modifier

@@ -1,5 +1,6 @@
 package com.yusy.keykeeper.ui.pages.account
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,8 @@ import com.yusy.keykeeper.data.account.accountExampleWebsite
 import com.yusy.keykeeper.ui.AppViewModelProvider
 import com.yusy.keykeeper.ui.components.iconpainter.iconPainter
 import com.yusy.keykeeper.ui.navigation.MyNavActions
+import com.yusy.keykeeper.ui.navigation.MyRoutes
+import com.yusy.keykeeper.ui.navigation.MySecondLevelDestination
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 import kotlinx.coroutines.launch
 
@@ -37,16 +41,25 @@ fun AccountEntryScreen(
     viewModel: AccountEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     AccountEntryBody(
         accountEntryUiState = viewModel.accountEntryUiState,
-        onAccountValueChange = viewModel::updateUiState,
+        onAccountValueChange = viewModel::updateAccountEntryUiState,
         onSave = {
             coroutineScope.launch {
                 viewModel.saveAccount()
                 myNavActions.navigateBack()
-                // TODO:底部弹窗提示
+                // TODO:弹窗文本本地化
+                Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
+        },
+        onAppChoose = {
+            myNavActions.navigateToChild(
+                MySecondLevelDestination(
+                    route = MyRoutes.APP_CHOOSE_PAGE
+                )
+            )
         },
         modifier = modifier
     )
@@ -56,6 +69,7 @@ fun AccountEntryScreen(
 fun AccountEntryBody(
     accountEntryUiState: AccountEntryUiState,
     onAccountValueChange: (AccountDetails) -> Unit,
+    onAppChoose: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -86,7 +100,12 @@ fun AccountEntryBody(
         }
 
         // input form
-        EntryInputForm(accountDetails = accountEntryUiState.accountDetails, onValueChange = onAccountValueChange, modifier = modifier)
+        EntryInputForm(
+            accountDetails = accountEntryUiState.accountDetails,
+            onValueChange = onAccountValueChange,
+            onAppChoose = onAppChoose,
+            modifier = modifier
+        )
 
         // save button
         Button(
@@ -113,8 +132,9 @@ fun AccountEntryScreenPreview_Android() {
     KeyKeeperTheme {
         AccountEntryBody(
             accountEntryUiState = accountExampleAndroid.toAccountDetails().toAccountEntryUiState(true),
-            onSave = {},
-            onAccountValueChange = {}
+            onAccountValueChange = {},
+            onAppChoose = {},
+            onSave = {}
         )
     }
 }
@@ -125,8 +145,9 @@ fun AccountEntryScreenPreview_Website() {
     KeyKeeperTheme {
         AccountEntryBody(
             accountEntryUiState = accountExampleWebsite.toAccountDetails().toAccountEntryUiState(true),
-            onSave = {},
-            onAccountValueChange = {}
+            onAccountValueChange = {},
+            onAppChoose = {},
+            onSave = {}
         )
     }
 }

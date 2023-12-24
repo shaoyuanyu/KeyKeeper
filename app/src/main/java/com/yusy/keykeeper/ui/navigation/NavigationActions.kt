@@ -19,6 +19,7 @@ object MyRoutes {
     const val SETTING = "Setting"
     const val ACCOUNT_CREATE_PAGE = "AccountCreatePage"
     const val ACCOUNT_EDIT_PAGE = "AccountEditPage"
+    const val APP_CHOOSE_PAGE = "AppChoosePage"
 }
 
 data class MyTopLevelDestination(
@@ -85,6 +86,19 @@ class MyNavActions(private val navController: NavHostController) {
             }
             launchSingleTop = true
             // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
+    }
+
+    fun navigateToChild(destination: MySecondLevelDestination) {
+        val routeString = if (destination.param.isEmpty()) {
+            destination.route
+        } else {
+            destination.route + "/" + destination.param
+        }
+
+        navController.navigate(routeString) {
+            launchSingleTop = true
             restoreState = true
         }
     }
