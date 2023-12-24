@@ -1,6 +1,8 @@
 package com.yusy.keykeeper.ui.pages.account
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -70,52 +70,54 @@ fun AppChooseBody(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppCard(
     localDeskApp: LocalDeskApp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card (
-        onClick = onClick,
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(10.dp)
+//            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .clickable(
+                enabled = true,
+                onClick = onClick
+            )
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            IconButton(
-                onClick = { },
-                modifier = Modifier
+        IconButton(
+            onClick = { },
+            modifier = modifier
+                .size(50.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            Image(
+                modifier = modifier
                     .size(50.dp)
-                    .clip(CircleShape)
-//                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape),
-                    painter = iconPainter(appIcon = localDeskApp.appIcon),
-                    contentDescription = "app icon",
-                )
-            }
+                    .clip(CircleShape),
+                painter = iconPainter(appIcon = localDeskApp.appIcon),
+                contentDescription = "app icon",
+            )
+        }
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 4.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = localDeskApp.appName,
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
-                    text = localDeskApp.packageName,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
+        Column(
+            modifier = modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = localDeskApp.appName,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+            Text(
+                text = localDeskApp.packageName,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
         }
     }
 }
