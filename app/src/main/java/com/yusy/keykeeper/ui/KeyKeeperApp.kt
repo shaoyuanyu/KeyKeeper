@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,6 +22,7 @@ import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.navigation.NavigationBarUI
 import com.yusy.keykeeper.ui.pages.account.AccountEditScreen
 import com.yusy.keykeeper.ui.pages.account.AccountEntryScreen
+import com.yusy.keykeeper.ui.pages.account.AccountEntryViewModel
 import com.yusy.keykeeper.ui.pages.account.AppChooseScreen
 import com.yusy.keykeeper.ui.pages.home.HomeScreen
 import com.yusy.keykeeper.ui.pages.mine.MineUI
@@ -71,6 +73,9 @@ fun MyNavHost(
     myNavController: NavHostController,
     myNavActions: MyNavActions
 ) {
+    // AccountEntryScreen 和 AppChooseScreen 共用一个ViewModel
+    var accountEntryViewModel: AccountEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
     NavHost(
         modifier = modifier,
         navController = myNavController,
@@ -95,7 +100,12 @@ fun MyNavHost(
         }
 
         composable(MyRoutes.ACCOUNT_CREATE_PAGE) {
-            AccountEntryScreen(myNavActions = myNavActions)
+            accountEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+            AccountEntryScreen(
+                myNavActions = myNavActions,
+                viewModel = accountEntryViewModel
+            )
         }
 
         composable(
@@ -109,7 +119,10 @@ fun MyNavHost(
         }
 
         composable(MyRoutes.APP_CHOOSE_PAGE) {
-            AppChooseScreen(myNavActions = myNavActions)
+            AppChooseScreen(
+                myNavActions = myNavActions,
+                viewModel = accountEntryViewModel
+            )
         }
     }
 }
