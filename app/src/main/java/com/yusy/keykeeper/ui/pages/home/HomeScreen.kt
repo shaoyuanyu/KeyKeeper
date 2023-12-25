@@ -19,9 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.yusy.keykeeper.data.account.Account
-import com.yusy.keykeeper.data.account.AppType
-import com.yusy.keykeeper.data.account.EncryptFunc
+import com.yusy.keykeeper.data.account.accountExampleAndroid
 import com.yusy.keykeeper.ui.AppViewModelProvider
 import com.yusy.keykeeper.ui.components.accountcard.AccountCard
 import com.yusy.keykeeper.ui.components.accountcard.AccountPreview
@@ -100,17 +98,7 @@ fun HomeBody(
 @Composable
 fun HomeScreenPreview() {
     val accountPreviewList: List<AccountPreview> = List(10) {
-        Account(
-            id = 0,
-            uid = "",
-            encryptedPasswd = "",
-            encryptFunc = EncryptFunc.Fun1,
-            appType = AppType.AndroidAPP,
-            appName = "test",
-            appUrl = "com.yusy.test",
-            appIconPath = "",
-            createdAt = "2023/12/23"
-        ).toAccountPreview()
+        accountExampleAndroid.toAccountPreview()
     }
 
     KeyKeeperTheme {
