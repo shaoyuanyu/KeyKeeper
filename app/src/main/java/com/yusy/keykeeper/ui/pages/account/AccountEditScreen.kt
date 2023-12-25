@@ -28,9 +28,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -57,6 +59,7 @@ fun AccountEditScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
 
     LaunchedEffect(Unit) {
         viewModel.setId(id)
@@ -71,10 +74,11 @@ fun AccountEditScreen(
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
         },
-        onSave = {
+        onSave = { passwd ->
             coroutineScope.launch {
                 viewModel.saveAccount()
                 myNavActions.navigateBack()
+                clipboardManager.setText(AnnotatedString(passwd))
                 // TODO:弹窗文本本地化
                 Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
@@ -97,7 +101,7 @@ fun AccountEditBody(
     onAccountValueChange: (AccountDetails) -> Unit,
     onPasswdVisibleChange: () -> Unit,
     onGeneratePasswd: () -> Unit,
-    onSave: () -> Unit,
+    onSave: (String) -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -154,7 +158,7 @@ fun AccountEditBody(
             enabled = accountEditUiState.isValid,
             onClick = {
                 if (accountEditUiState.isValid) {
-                    onSave()
+                    onSave(accountEditUiState.accountDetails.plainPasswd)
                 }
             },
             modifier = inputModifier

@@ -31,9 +31,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -59,6 +61,7 @@ fun AccountEntryScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
 
     AccountEntryBody(
         accountEntryUiState = viewModel.accountEntryUiState,
@@ -83,10 +86,11 @@ fun AccountEntryScreen(
                 )
             )
         },
-        onSave = {
+        onSave = { passwd ->
             coroutineScope.launch {
                 viewModel.saveAccount(context)
                 myNavActions.navigateBack()
+                clipboardManager.setText(AnnotatedString(passwd))
                 // TODO:弹窗文本本地化
                 Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
             }
@@ -103,7 +107,7 @@ fun AccountEntryBody(
     onUidCandidateDismiss: () -> Unit,
     onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
-    onSave: () -> Unit,
+    onSave: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -153,7 +157,7 @@ fun AccountEntryBody(
             enabled = accountEntryUiState.isValid,
             onClick = {
                 if (accountEntryUiState.isValid) {
-                    onSave()
+                    onSave(accountEntryUiState.accountDetails.plainPasswd)
                 }
             },
             modifier = inputModifier
@@ -349,7 +353,6 @@ fun EntryInputForm(
         with (accountDetails) {
             if (appType == AppType.AndroidAPP || appType == AppType.HmAPP) {
                 // appUrl - app
-                // TODO:增加APP选择页面，点击输出框后切出，同时输出框上滑至页面顶端，可用于输入关键词搜索APP
                 OutlinedTextField(
                     modifier = inputModifier,
                     value = accountDetails.appUrl,
