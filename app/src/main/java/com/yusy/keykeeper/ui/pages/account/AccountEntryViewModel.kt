@@ -3,6 +3,7 @@ package com.yusy.keykeeper.ui.pages.account
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,11 +11,15 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yusy.keykeeper.data.account.AccountsRepository
+import com.yusy.keykeeper.data.account.UsedUid
 import com.yusy.keykeeper.utils.generatePasswd
 import com.yusy.keykeeper.utils.storeIcon
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,12 +29,73 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
     var accountEntryUiState by mutableStateOf(AccountEntryUiState())
         private set
 
-    fun updateAccountEntryUiState(accountDetails: AccountDetails) {
-        accountEntryUiState = AccountEntryUiState(
-            accountDetails = accountDetails,
-            isValid = validateInput(accountDetails)
-        )
+    //
+    private lateinit var usedUidList: List<String>
+
+    init {
+        val usedUidArrayList = arrayListOf<String>()
+
+        viewModelScope.launch {
+            accountsRepository.getAllUsedUid()
+                .first()
+                .forEach {
+                    usedUidArrayList.add(it.uid)
+                }
+
+            usedUidList = usedUidArrayList.toList()
+        }
     }
+
+    fun updateAccountEntryUiState(accountDetails: AccountDetails) {
+        if (accountEntryUiState.accountDetails.uid != accountDetails.uid) {
+            accountEntryUiState = AccountEntryUiState(
+                accountDetails = accountDetails,
+                uidCandidateList = getUidCandidateList(accountDetails.uid),
+                isValid = validateInput(accountDetails)
+            )
+
+            Log.i("UID", accountEntryUiState.uidCandidateList.size.toString())
+        } else {
+            accountEntryUiState = AccountEntryUiState(
+                accountDetails = accountDetails,
+                uidCandidateList = accountEntryUiState.uidCandidateList,
+                isValid = validateInput(accountDetails)
+            )
+        }
+
+    }
+
+    private fun getUidCandidateList(currentInputUid: String): List<String> {
+        val uidCandidateArrayList = arrayListOf<String>()
+
+        usedUidList.forEach {
+            if (it.isNotEmpty() && it.contains(currentInputUid)) {
+                uidCandidateArrayList.add(it)
+            }
+        }
+
+        return if (uidCandidateArrayList.size > 3) {
+            uidCandidateArrayList.slice(0..2).toList()
+        } else {
+            uidCandidateArrayList.toList()
+        }
+    }
+
+    fun chooseUidCandidate(uid: String) {
+        updateAccountEntryUiState(accountEntryUiState.accountDetails.copy(uid = uid))
+        dismissUidCandidate()
+    }
+
+    fun dismissUidCandidate() {
+        accountEntryUiState = AccountEntryUiState(
+            accountDetails = accountEntryUiState.accountDetails,
+            uidCandidateList = listOf(),
+            isValid = accountEntryUiState.isValid
+        )
+
+        Log.i("UID", "dismiss")
+    }
+
 
     fun generateSecurePasswd() {
         updateAccountEntryUiState(accountEntryUiState.accountDetails.copy(plainPasswd = generatePasswd()))
@@ -51,8 +117,25 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
                 iconImageBitmap = accountIcon
             )
 
-            //
+            // account table
             accountsRepository.insertAccount(account)
+
+            // usedUid table
+            val usedUid = accountsRepository.getUsedUid(account.uid).firstOrNull()
+
+            if (usedUid == null) {
+                accountsRepository.insertUsedUid(
+                    UsedUid(
+                        uid = account.uid,
+                        usedTimes = 1
+                    )
+                )
+            } else {
+                accountsRepository.updateUsedUid(
+                    usedUid.copy(usedTimes = ++usedUid.usedTimes)
+                )
+            }
+
         }
     }
 
@@ -152,6 +235,7 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
 
 data class AccountEntryUiState(
     val accountDetails: AccountDetails = AccountDetails(),
+    val uidCandidateList: List<String> = listOf(),
     var isReadingLocalDeskApp: Boolean = false,
     val isValid: Boolean = false
 )

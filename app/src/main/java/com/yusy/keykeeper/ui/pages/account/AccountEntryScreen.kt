@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +30,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusy.keykeeper.R
 import com.yusy.keykeeper.data.account.AppType
@@ -58,13 +63,11 @@ fun AccountEntryScreen(
     AccountEntryBody(
         accountEntryUiState = viewModel.accountEntryUiState,
         onAccountValueChange = viewModel::updateAccountEntryUiState,
-        onSave = {
-            coroutineScope.launch {
-                viewModel.saveAccount(context)
-                myNavActions.navigateBack()
-                // TODO:弹窗文本本地化
-                Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
-            }
+        onUidCandidateChoose = {
+            viewModel.chooseUidCandidate(it)
+        },
+        onUidCandidateDismiss = {
+            viewModel.dismissUidCandidate()
         },
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
@@ -80,6 +83,14 @@ fun AccountEntryScreen(
                 )
             )
         },
+        onSave = {
+            coroutineScope.launch {
+                viewModel.saveAccount(context)
+                myNavActions.navigateBack()
+                // TODO:弹窗文本本地化
+                Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
+            }
+        },
         modifier = modifier
     )
 }
@@ -88,6 +99,8 @@ fun AccountEntryScreen(
 fun AccountEntryBody(
     accountEntryUiState: AccountEntryUiState,
     onAccountValueChange: (AccountDetails) -> Unit,
+    onUidCandidateChoose: (String) -> Unit,
+    onUidCandidateDismiss: () -> Unit,
     onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
     onSave: () -> Unit,
@@ -124,8 +137,11 @@ fun AccountEntryBody(
         // input form
         EntryInputForm(
             accountDetails = accountEntryUiState.accountDetails,
-            accountEntryUiState = accountEntryUiState,
+            isLoading = accountEntryUiState.isReadingLocalDeskApp,
+            uidCandidateList = accountEntryUiState.uidCandidateList,
             onValueChange = onAccountValueChange,
+            onUidCandidateChoose = onUidCandidateChoose,
+            onUidCandidateDismiss = onUidCandidateDismiss,
             onGeneratePasswd = onGeneratePasswd,
             onAppChoose = onAppChoose,
             modifier = modifier
@@ -193,8 +209,11 @@ fun AccountEntryBody(
 @Composable
 fun EntryInputForm(
     accountDetails: AccountDetails,
-    accountEntryUiState: AccountEntryUiState,
+    isLoading: Boolean,
+    uidCandidateList: List<String>,
     onValueChange: (AccountDetails) -> Unit,
+    onUidCandidateChoose: (String) -> Unit,
+    onUidCandidateDismiss: () -> Unit,
     onGeneratePasswd: () -> Unit,
     onAppChoose: () -> Unit,
     modifier: Modifier = Modifier
@@ -211,16 +230,40 @@ fun EntryInputForm(
             .align(Alignment.End)
 
         // account id
-        OutlinedTextField(
-            modifier = inputModifier,
-            value = accountDetails.uid,
-            onValueChange = { onValueChange(accountDetails.copy(uid = it)) },
-            label = { Row {
-                Text(stringResource(R.string.account_page_account))
-            } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
-            singleLine = true,
-        )
+        Box {
+            OutlinedTextField(
+                modifier = inputModifier,
+                value = accountDetails.uid,
+                onValueChange = { onValueChange(accountDetails.copy(uid = it)) },
+                label = { Row {
+                    Text(stringResource(R.string.account_page_account))
+                } },
+                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+                singleLine = true,
+            )
+            if (uidCandidateList.isNotEmpty()) {
+                Popup(
+                    alignment = Alignment.BottomCenter,
+                    offset = IntOffset(0,160*uidCandidateList.size),
+                    onDismissRequest = onUidCandidateDismiss
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 0.dp)
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(3.dp))
+                            .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(3.dp))
+                    ) {
+                        uidCandidateList.forEach {uidCandidate ->
+                            DropdownMenuItem(
+                                text = { Text(uidCandidate) },
+                                onClick = { onUidCandidateChoose(uidCandidate) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         // account passwd
         OutlinedTextField(
@@ -317,7 +360,7 @@ fun EntryInputForm(
                     leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appurl)) },
                     trailingIcon = {
                         IconButton(onClick = { onAppChoose() }) {
-                            if (!accountEntryUiState.isReadingLocalDeskApp) {
+                            if (!isLoading) {
                                 Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = stringResource(R.string.account_page_chooseapp))
                             } else {
                                 CircularProgressIndicator()
@@ -395,6 +438,8 @@ fun AccountEntryScreenPreview_Android() {
         AccountEntryBody(
             accountEntryUiState = accountExampleAndroid.toAccountDetails().toAccountEntryUiState(true),
             onAccountValueChange = {},
+            onUidCandidateChoose = {},
+            onUidCandidateDismiss = {},
             onGeneratePasswd = {},
             onAppChoose = {},
             onSave = {}
@@ -409,6 +454,8 @@ fun AccountEntryScreenPreview_Website() {
         AccountEntryBody(
             accountEntryUiState = accountExampleWebsite.toAccountDetails().toAccountEntryUiState(true),
             onAccountValueChange = {},
+            onUidCandidateChoose = {},
+            onUidCandidateDismiss = {},
             onGeneratePasswd = {},
             onAppChoose = {},
             onSave = {}
