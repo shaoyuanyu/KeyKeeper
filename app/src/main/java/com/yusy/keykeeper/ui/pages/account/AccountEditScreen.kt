@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -25,7 +26,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -60,6 +65,7 @@ fun AccountEditScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
+    var openDeleteDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.setId(id)
@@ -84,15 +90,46 @@ fun AccountEditScreen(
             }
         },
         onDelete = {
-            coroutineScope.launch {
-                viewModel.deleteAccount()
-                myNavActions.navigateBack()
-                // TODO:弹窗文本本地化
-                Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show()
-            }
+            // 显示弹窗
+            openDeleteDialog = true
         },
         modifier = modifier
     )
+
+    if (openDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { openDeleteDialog = false },
+            title = {
+                Icon(Icons.Default.Warning, contentDescription = null)
+            },
+            text = {
+                Text(text = "删除后账号和密码数据无法恢复，是否确认删除？")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        openDeleteDialog = false
+
+                        coroutineScope.launch {
+                            viewModel.deleteAccount()
+                            myNavActions.navigateBack()
+                            // TODO:弹窗文本本地化
+                            Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                ) {
+                    Text(text = "确认")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { openDeleteDialog = false }
+                ) {
+                    Text(text = "取消")
+                }
+            },
+        )
+    }
 }
 
 @Composable

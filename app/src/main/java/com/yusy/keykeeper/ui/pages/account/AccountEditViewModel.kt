@@ -93,7 +93,7 @@ class AccountEditViewModel(
 data class AccountEditUiState(
     val accountDetails: AccountDetails = AccountDetails(),
     var isValid: Boolean = true,
-    var isPasswdVisible: Boolean = false,
+    var isPasswdVisible: Boolean = false
 )
 
 fun AccountDetails.toAccountEditUiState(isValid: Boolean): AccountEditUiState = AccountEditUiState(

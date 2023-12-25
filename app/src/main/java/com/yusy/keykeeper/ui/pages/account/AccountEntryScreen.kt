@@ -192,6 +192,8 @@ fun AccountEntryBody(
             Text(
                 text = if (accountEntryUiState.accountDetails.plainPasswd.isEmpty()) {
                     "密码不得为空"
+                } else if (accountEntryUiState.accountDetails.appType == AppType.Unknown) {
+                    "请选择类型"
                 } else if (accountEntryUiState.accountDetails.appName.isEmpty()) {
                     "应用名不得为空"
                 } else {
