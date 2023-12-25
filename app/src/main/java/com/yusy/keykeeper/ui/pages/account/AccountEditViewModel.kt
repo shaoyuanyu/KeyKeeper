@@ -61,6 +61,9 @@ class AccountEditViewModel(
             val account = accountEditUiState.accountDetails.toAccount()
             account.createdAt = formattedTime
 
+            // icon path
+            account.appIconPath = accountToDelete.appIconPath
+
             //
             accountsRepository.updateAccount(account)
 
