@@ -1,5 +1,6 @@
 package com.yusy.keykeeper.ui.pages.account
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -64,7 +65,13 @@ class AccountEditViewModel(
     }
 
     suspend fun deleteAccount() {
+        // delete account
         accountsRepository.deleteAccount(accountToDelete)
+
+        // used uid --
+        val usedUid = accountsRepository.getUsedUid(accountToDelete.uid).first()!!
+        Log.i("UID", "delete:" + usedUid.uid + "," + usedUid.usedTimes)
+        accountsRepository.updateUsedUid(usedUid.copy(usedTimes = --usedUid.usedTimes))
     }
 
     // appName和plainPasswd不可为空
