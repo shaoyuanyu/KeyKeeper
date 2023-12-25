@@ -23,7 +23,9 @@
 - [x] Room持久化开发
 - [x] 读取本地桌面App
 - [x] 账号创建/修改/删除
+- [ ] Splash Screen
 - [ ] 首页卡片搜索和排序
 - [ ] 进入KeyKeeper时进行生物验证
 - [ ] 自动填充服务
 - [ ] 设置页面
+- [ ] OpenHarmony版本
