@@ -41,8 +41,13 @@ class AccountEditViewModel(
     fun updateAccountEditUiState(accountDetails: AccountDetails) {
         accountEditUiState = AccountEditUiState(
             accountDetails = accountDetails,
-            isValid = validateInput(accountDetails)
+            isValid = validateInput(accountDetails),
+            isPasswdVisible = accountEditUiState.isPasswdVisible
         )
+    }
+
+    fun changePasswdVisible() {
+        accountEditUiState = accountEditUiState.copy(isPasswdVisible = !accountEditUiState.isPasswdVisible)
     }
 
     fun generateSecurePasswd() {
@@ -84,7 +89,8 @@ class AccountEditViewModel(
 
 data class AccountEditUiState(
     val accountDetails: AccountDetails = AccountDetails(),
-    var isValid: Boolean = true
+    var isValid: Boolean = true,
+    var isPasswdVisible: Boolean = false,
 )
 
 fun AccountDetails.toAccountEditUiState(isValid: Boolean): AccountEditUiState = AccountEditUiState(

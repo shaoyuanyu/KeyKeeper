@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
@@ -30,6 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +65,9 @@ fun AccountEditScreen(
     AccountEditBody(
         accountEditUiState = viewModel.accountEditUiState,
         onAccountValueChange = viewModel::updateAccountEditUiState,
+        onPasswdVisibleChange = {
+            viewModel.changePasswdVisible()
+        },
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
         },
@@ -88,6 +95,7 @@ fun AccountEditScreen(
 fun AccountEditBody(
     accountEditUiState: AccountEditUiState,
     onAccountValueChange: (AccountDetails) -> Unit,
+    onPasswdVisibleChange: () -> Unit,
     onGeneratePasswd: () -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit,
@@ -124,6 +132,8 @@ fun AccountEditBody(
         // input form
         EditInputForm(
             accountDetails = accountEditUiState.accountDetails,
+            isPasswdVisible = accountEditUiState.isPasswdVisible,
+            onPasswdVisibleChange = onPasswdVisibleChange,
             onGeneratePasswd = onGeneratePasswd,
             onValueChange = onAccountValueChange,
             modifier = modifier
@@ -133,7 +143,9 @@ fun AccountEditBody(
         Text(
             text = stringResource(R.string.account_page_createdat) + "  " + accountEditUiState.accountDetails.createdAt,
             color = MaterialTheme.colorScheme.tertiary,
-            modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 5.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 5.dp)
         )
 
         // save button
@@ -217,6 +229,8 @@ fun AccountEditBody(
 @Composable
 fun EditInputForm(
     accountDetails: AccountDetails,
+    isPasswdVisible: Boolean,
+    onPasswdVisibleChange: () -> Unit,
     onValueChange: (AccountDetails) -> Unit,
     onGeneratePasswd: () -> Unit,
     modifier: Modifier = Modifier
@@ -241,7 +255,7 @@ fun EditInputForm(
             label = { Row {
                 Text(stringResource(R.string.account_page_account))
             } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
             singleLine = true,
             readOnly = true
         )
@@ -255,13 +269,24 @@ fun EditInputForm(
                 Text(stringResource(R.string.account_page_passwd))
                 Text( color = MaterialTheme.colorScheme.error, text = "*")
             } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
             trailingIcon = {
-                IconButton(onClick = onGeneratePasswd) {
-                    Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
+                Row {
+                    IconButton(onClick = onPasswdVisibleChange) {
+                        if (isPasswdVisible) {
+                            Icon(painter = painterResource(R.drawable.ic_visibility), contentDescription = null)
+                        } else {
+                            Icon(painter = painterResource(R.drawable.ic_visibility_off), contentDescription = null)
+                        }
+                    }
+                    IconButton(onClick = onGeneratePasswd) {
+                        Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = null)
+                    }
                 }
             },
             singleLine = true,
+            visualTransformation = if (isPasswdVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
         // 提示 - 点击图标生成可靠密码
@@ -351,6 +376,7 @@ fun AccountEditScreenPreview_Android() {
         AccountEditBody(
             accountEditUiState = accountExampleAndroid.toAccountDetails().toAccountEditUiState(true),
             onAccountValueChange = {},
+            onPasswdVisibleChange = {},
             onGeneratePasswd = {},
             onDelete = {},
             onSave = {}
@@ -365,6 +391,7 @@ fun AccountEditScreenPreview_Website() {
         AccountEditBody(
             accountEditUiState = accountExampleWebsite.toAccountDetails().toAccountEditUiState(true),
             onAccountValueChange = {},
+            onPasswdVisibleChange = {},
             onGeneratePasswd = {},
             onDelete = {},
             onSave = {}
