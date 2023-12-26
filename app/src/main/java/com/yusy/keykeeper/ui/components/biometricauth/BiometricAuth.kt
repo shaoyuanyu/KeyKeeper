@@ -22,9 +22,9 @@ fun BiometricAuth(
 
     // TODO:弹窗文本本地化
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Biometric login for my app")
-        .setSubtitle("Log in using your biometric credential")
-        .setNegativeButtonText("cancel")
+        .setTitle("安全验证")
+        .setSubtitle("请验证指纹以进入app")
+        .setNegativeButtonText("取消")
         .setAllowedAuthenticators(BIOMETRIC_STRONG)
         .build()
 
