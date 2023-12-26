@@ -104,18 +104,22 @@ class AccountEntryViewModel(private val accountsRepository: AccountsRepository):
     suspend fun saveAccount(context: Context) {
         if (validateInput()) {
             val account = accountEntryUiState.accountDetails.toAccount()
-            val accountIcon = accountEntryUiState.accountDetails.appIcon!!
+            val accountIcon = accountEntryUiState.accountDetails.appIcon
 
             // time
             val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             account.createdAt = formattedTime
 
             // icon
-            account.appIconPath = storeIcon(
-                context = context,
-                iconName = account.appUrl,
-                iconImageBitmap = accountIcon
-            )
+            account.appIconPath = if (accountIcon != null) {
+                storeIcon(
+                    context = context,
+                    iconName = account.appUrl,
+                    iconImageBitmap = accountIcon
+                )
+            } else {
+                ""
+            }
 
             // account table
             accountsRepository.insertAccount(account)
