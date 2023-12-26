@@ -50,7 +50,7 @@ android {
 dependencies {
     // core
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.core:core-splashscreen:1.0.1") // splash screen
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha02") // splash screen
 
     // lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
