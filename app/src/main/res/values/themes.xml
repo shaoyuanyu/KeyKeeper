@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.KeyKeeperSplashScreen" parent="Theme.SplashScreen">
+<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/appic_key_keeper_round</item>-->
+        <item name="windowSplashScreenBackground">#FFFFFFFF</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.KeyKeeper</item>
+    </style>
 
     <style name="Theme.KeyKeeper" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

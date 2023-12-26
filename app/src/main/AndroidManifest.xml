@@ -20,13 +20,18 @@
         android:theme="@style/Theme.KeyKeeper"
         >
         <activity
-            android:name=".MainActivity"
+            android:name=".HelloActivity"
             android:exported="true"
-            android:theme="@style/Theme.KeyKeeper">
+            android:theme="@style/Theme.KeyKeeperSplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.KeyKeeper">
         </activity>
     </application>
 
