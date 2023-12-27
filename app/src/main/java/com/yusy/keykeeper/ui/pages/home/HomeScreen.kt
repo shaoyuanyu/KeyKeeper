@@ -62,8 +62,7 @@ fun HomeScreen(
                     route = MyRoutes.ACCOUNT_CREATE_PAGE
                 )
             )
-        },
-        modifier = modifier
+        }
     )
 }
 

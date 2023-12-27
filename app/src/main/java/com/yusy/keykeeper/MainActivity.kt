@@ -3,8 +3,6 @@ package com.yusy.keykeeper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.yusy.keykeeper.ui.MyNavHost
 import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
-import com.yusy.keykeeper.ui.navigation.NavigationBarUI
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 // class MainActivity: ComponentActivity() {
@@ -47,24 +44,12 @@ fun MyContent() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                MyNavHost(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    myNavController = myNavController,
-                    myNavActions = myNavActions
-                )
-
-                AnimatedVisibility(visible = true) {
-                    NavigationBarUI(
-                        selectedDestination = selectedDestination,
-                        myNavActions = myNavActions
-                    )
-                }
-            }
+            MyNavHost(
+                modifier = Modifier.fillMaxSize(),
+                myNavController = myNavController,
+                myNavActions = myNavActions,
+                selectedDestination = selectedDestination
+            )
         }
     }
 }

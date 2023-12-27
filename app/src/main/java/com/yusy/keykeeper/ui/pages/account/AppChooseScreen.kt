@@ -35,17 +35,10 @@ fun AppChooseScreen(
     modifier: Modifier = Modifier,
     viewModel: AccountEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        viewModel.getDeskAppList(context)
-    }
-
     AppChooseBody(
         appChooseUiState = viewModel.appChooseUiState,
         onSearchValueChange = {
-            viewModel.updateAppChooseUiState(it)
-            viewModel.searchApp()
+            viewModel.updateSearchWord(it)
         },
         onAppChoose = {
             viewModel.chooseApp(it)

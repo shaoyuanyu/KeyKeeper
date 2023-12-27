@@ -76,15 +76,19 @@ fun AccountEntryScreen(
             viewModel.generateSecurePasswd()
         },
         onAppChoose = {
-            // 启动加载状态
-            // 此状态在AppChooseScreen完成getDeskAppList()后结束
-            viewModel.setLoadingLocalDeskAppStatus(true)
+            coroutineScope.launch {
+                // 启动加载状态
+                // 此状态在AppChooseScreen完成getDeskAppList()后结束
+                viewModel.setLoadingLocalDeskAppStatus(true)
 
-            myNavActions.navigateToChild(
-                MySecondLevelDestination(
-                    route = MyRoutes.APP_CHOOSE_PAGE
+                viewModel.initAppChooseUiState(context)
+
+                myNavActions.navigateToChild(
+                    MySecondLevelDestination(
+                        route = MyRoutes.APP_CHOOSE_PAGE
+                    )
                 )
-            )
+            }
         },
         onSave = { passwd ->
             coroutineScope.launch {

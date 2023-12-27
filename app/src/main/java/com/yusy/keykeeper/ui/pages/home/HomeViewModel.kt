@@ -70,7 +70,7 @@ data class HomeUiState(
 
         accountPreviewList.forEach {
             Log.i("search", "accountPreviewList: " + it.appName)
-            if (it.appName.lowercase().contains(targetName) || it.appUrl.lowercase().contains(targetName)) {
+            if (it.appName.lowercase().contains(targetName.lowercase()) || it.appUrl.lowercase().contains(targetName.lowercase())) {
                 results.add(it)
             }
         }
