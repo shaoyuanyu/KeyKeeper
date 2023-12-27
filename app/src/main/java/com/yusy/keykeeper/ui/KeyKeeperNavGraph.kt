@@ -14,9 +14,9 @@ import com.yusy.keykeeper.ui.pages.account.AccountEditScreen
 import com.yusy.keykeeper.ui.pages.account.AccountEntryScreen
 import com.yusy.keykeeper.ui.pages.account.AccountEntryViewModel
 import com.yusy.keykeeper.ui.pages.account.AppChooseScreen
+import com.yusy.keykeeper.ui.pages.authenticator.AuthenticatorScreen
 import com.yusy.keykeeper.ui.pages.home.HomeScreen
 import com.yusy.keykeeper.ui.pages.mine.MineUI
-import com.yusy.keykeeper.ui.pages.search.SearchUI
 import com.yusy.keykeeper.ui.pages.setting.SettingUI
 
 @Composable
@@ -34,12 +34,12 @@ fun MyNavHost(
         startDestination = MyRoutes.HOME,
     ) {
         // top level destination
-        composable(MyRoutes.HOME) {
+        composable (MyRoutes.HOME) {
             HomeScreen(myNavActions = myNavActions)
         }
 
-        composable(MyRoutes.SEARCH) {
-            SearchUI()
+        composable(MyRoutes.AUTHENTICATOR) {
+            AuthenticatorScreen()
         }
 
         composable(MyRoutes.MINE) {

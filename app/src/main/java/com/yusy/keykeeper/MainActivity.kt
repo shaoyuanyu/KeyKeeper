@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yusy.keykeeper.ui.MyNavHost
