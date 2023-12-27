@@ -1,19 +1,22 @@
 package com.yusy.keykeeper.ui.pages.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +38,16 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val homeUiState by viewModel.homeUiState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.updateAccountPreviewList()
+    }
 
     HomeBody(
-        accountPreviewList = homeUiState.accountPreviewList,
+        accountPreviewList = viewModel.homeUiState.resultAccountPreviewList,
+        searchWord = viewModel.homeUiState.searchWord,
+        onSearchWordChange = {
+             viewModel.updateSearchWord(it)
+        },
         onCardClick = { id ->
             myNavActions.navigateTo(
                 MySecondLevelDestination(
@@ -61,19 +70,35 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     accountPreviewList: List<AccountPreview>,
+    searchWord: String,
+    onSearchWordChange: (String) -> Unit,
     onCardClick: (Int) -> Unit,
     onCreateClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-        ) {
-            items(accountPreviewList) { accountPreview ->
-                AccountCard(
-                    accountPreview = accountPreview,
-                    onClick = { onCardClick(accountPreview.id) }
-                )
+        Column {
+            OutlinedTextField(
+                value = searchWord,
+                onValueChange = {
+                    onSearchWordChange(it)
+                },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 5.dp),
+                singleLine = true,
+            )
+
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+            ) {
+                items(accountPreviewList) { accountPreview ->
+                    AccountCard(
+                        accountPreview = accountPreview,
+                        onClick = { onCardClick(accountPreview.id) }
+                    )
+                }
             }
         }
 
@@ -104,6 +129,8 @@ fun HomeScreenPreview() {
     KeyKeeperTheme {
         HomeBody(
             accountPreviewList = accountPreviewList,
+            searchWord = "",
+            onSearchWordChange = {},
             onCardClick = {},
             onCreateClick = {}
         )

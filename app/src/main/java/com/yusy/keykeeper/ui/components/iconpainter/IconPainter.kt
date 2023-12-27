@@ -21,7 +21,7 @@ fun iconPainter(appIcon: ImageBitmap?, appType: AppType): Painter {
                 painterResource(id = R.drawable.ic_launcher_foreground)
             }
             else -> {
-                painterResource(id = R.drawable.ic_launcher_foreground)
+                painterResource(id = R.drawable.ic_key)
             }
         }
     }
