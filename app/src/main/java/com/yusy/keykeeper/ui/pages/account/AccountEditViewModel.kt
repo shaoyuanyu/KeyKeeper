@@ -1,6 +1,5 @@
 package com.yusy.keykeeper.ui.pages.account
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,87 +13,90 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AccountEditViewModel(
-    private val accountsRepository: AccountsRepository,
-): ViewModel() {
+class AccountEditViewModel(val accountsRepository: AccountsRepository): ViewModel() {
     var accountEditUiState by mutableStateOf(AccountEditUiState())
-        private set
+//        private set
 
     // 用于删除
-    private lateinit var accountToDelete: Account
+    lateinit var accountToDelete: Account
+}
 
-    private var id: Int? = null
+fun AccountEditViewModel.updateAccountEditUiState(accountDetails: AccountDetails) {
+    accountEditUiState = accountEditUiState.updateAccountDetails(accountDetails)
+}
 
-    fun setId(id: Int) {
-        this.id = id
+fun AccountEditViewModel.changePasswdVisible() {
+    accountEditUiState = accountEditUiState.updatePasswdVisibility()
+}
 
-        viewModelScope.launch {
-            accountToDelete = accountsRepository.getAccountStreamById(id)
-                .first()
+fun AccountEditViewModel.generateSecurePasswd() {
+    accountEditUiState = accountEditUiState.updateGeneratingPasswd()
+}
 
-            accountEditUiState = accountToDelete
-                .toAccountDetails()
-                .toAccountEditUiState(true)
-        }
+fun AccountEditViewModel.setId(id: Int) {
+    viewModelScope.launch {
+        accountToDelete = accountsRepository.getAccountStreamById(id)
+            .first()
+
+        accountEditUiState = accountToDelete
+            .toAccountDetails()
+            .toAccountEditUiState(true)
     }
+}
 
-    fun updateAccountEditUiState(accountDetails: AccountDetails) {
-        accountEditUiState = AccountEditUiState(
-            accountDetails = accountDetails,
-            isValid = validateInput(accountDetails),
-            isPasswdVisible = accountEditUiState.isPasswdVisible
-        )
+suspend fun AccountEditViewModel.saveAccount() {
+    if (accountEditUiState.isValid) {
+        // time
+        val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        val account = accountEditUiState.accountDetails.toAccount()
+        account.createdAt = formattedTime
+
+        // icon path
+        account.appIconPath = accountToDelete.appIconPath
+
+        //
+        accountsRepository.updateAccount(account)
+
+        // 更新accountToDelete
+        accountToDelete = account
     }
+}
 
-    fun changePasswdVisible() {
-        accountEditUiState = accountEditUiState.copy(isPasswdVisible = !accountEditUiState.isPasswdVisible)
-    }
+suspend fun AccountEditViewModel.deleteAccount() {
+    // delete account
+    accountsRepository.deleteAccount(accountToDelete)
 
-    fun generateSecurePasswd() {
-        updateAccountEditUiState(accountEditUiState.accountDetails.copy(plainPasswd = generatePasswd()))
-    }
-
-    suspend fun saveAccount() {
-        if (validateInput()) {
-            // time
-            val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val account = accountEditUiState.accountDetails.toAccount()
-            account.createdAt = formattedTime
-
-            // icon path
-            account.appIconPath = accountToDelete.appIconPath
-
-            //
-            accountsRepository.updateAccount(account)
-
-            // 更新accountToDelete
-            accountToDelete = account
-        }
-    }
-
-    suspend fun deleteAccount() {
-        // delete account
-        accountsRepository.deleteAccount(accountToDelete)
-
-        // used uid --
-        val usedUid = accountsRepository.getUsedUid(accountToDelete.uid).first()!!
-        Log.i("UID", "delete:" + usedUid.uid + "," + usedUid.usedTimes)
-        accountsRepository.updateUsedUid(usedUid.copy(usedTimes = --usedUid.usedTimes))
-    }
-
-    // appName和plainPasswd不可为空
-    private fun validateInput(accountDetails: AccountDetails = accountEditUiState.accountDetails): Boolean {
-        return with(accountDetails) {
-            appName.isNotBlank() && plainPasswd.isNotBlank()
-        }
-    }
+    // used uid --
+    // TODO:防错机制
+    val usedUid = accountsRepository.getUsedUid(accountToDelete.uid).first()!!
+    accountsRepository.updateUsedUid(usedUid.copy(usedTimes = --usedUid.usedTimes))
 }
 
 data class AccountEditUiState(
     val accountDetails: AccountDetails = AccountDetails(),
     var isValid: Boolean = true,
     var isPasswdVisible: Boolean = false
-)
+) {
+    fun updateAccountDetails(accountDetails: AccountDetails): AccountEditUiState =
+        this.copy(
+            accountDetails = accountDetails,
+            isValid = doValidate(accountDetails)
+        )
+
+    fun updateGeneratingPasswd(): AccountEditUiState =
+        updateAccountDetails(
+            accountDetails = this.accountDetails.copy(plainPasswd = generatePasswd())
+        )
+
+    fun updatePasswdVisibility(): AccountEditUiState =
+        this.copy(isPasswdVisible = !this.isPasswdVisible)
+
+    private fun doValidate(accountDetails: AccountDetails): Boolean =
+        with(accountDetails) {
+            // appName和plainPasswd不可为空
+            appName.isNotBlank() && plainPasswd.isNotBlank()
+        }
+}
 
 fun AccountDetails.toAccountEditUiState(isValid: Boolean): AccountEditUiState = AccountEditUiState(
     accountDetails = this,

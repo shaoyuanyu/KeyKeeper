@@ -19,7 +19,7 @@ interface AccountDao {
     @Delete
     suspend fun delete(account: Account)
 
-    @Query("SELECT * from Account ORDER BY createdAt ASC")
+    @Query("SELECT * from Account ORDER BY createdAt DESC")
     fun getAllAccounts(): Flow<List<Account>>
 
     @Query("SELECT * from Account WHERE uid = :uid")
