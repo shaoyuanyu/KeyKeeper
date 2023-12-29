@@ -98,12 +98,12 @@ fun HelloBody(
             onClick = onFingerprintAuthClick,
             modifier = Modifier
                 .clip(CircleShape)
-                .padding(bottom = 100.dp)
+                .padding(bottom = 150.dp)
                 .align(Alignment.BottomCenter)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_fingerprint),
-                modifier = Modifier.size(60.dp),
+                modifier = Modifier.size(150.dp),
                 contentDescription = null
             )
         }
