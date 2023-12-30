@@ -78,9 +78,8 @@ dependencies {
     // biometric
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
-    // appCompact
-    // unused
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    // autofill
+    implementation("androidx.autofill:autofill:1.3.0-alpha01")
 
     testImplementation("junit:junit:4.13.2")
 

@@ -17,8 +17,6 @@ import com.yusy.keykeeper.ui.navigation.MyNavActions
 import com.yusy.keykeeper.ui.navigation.MyRoutes
 import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
-// class MainActivity: ComponentActivity() {
-// Biometric Auth要求FragmentActivity
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

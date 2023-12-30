@@ -31,8 +31,22 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="false"
             android:theme="@style/Theme.KeyKeeper">
         </activity>
+
+        <service
+            android:name=".services.autofill.KeyKeeperAutofillService"
+            android:label="KeyKeeper Autofill Service"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service_configuration" />
+        </service>
     </application>
 
 </manifest>
