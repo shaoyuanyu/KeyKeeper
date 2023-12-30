@@ -13,6 +13,8 @@ class OfflineAccountsRepository(
 
     override fun getAccountStreamById(id: Int): Flow<Account> = accountDao.getAccountById(id)
 
+    override fun getAccountStreamByAppUrl(appUrl: String): Flow<Account?> = accountDao.getAccountByAppUrl(appUrl)
+
     override suspend fun insertAccount(account: Account) = accountDao.insert(account)
 
     override suspend fun deleteAccount(account: Account) = accountDao.delete(account)

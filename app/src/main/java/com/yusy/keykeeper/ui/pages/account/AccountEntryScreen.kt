@@ -95,7 +95,7 @@ fun AccountEntryScreen(
                 myNavActions.navigateBack()
                 clipboardManager.setText(AnnotatedString(passwd))
                 // TODO:弹窗文本本地化
-                Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "创建成功，密码已为您复制到剪切板", Toast.LENGTH_SHORT).show()
             }
         },
         modifier = modifier

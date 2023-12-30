@@ -75,7 +75,7 @@ suspend fun AccountEntryViewModel.saveAccount(context: Context) {
         val formattedTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         account.createdAt = formattedTime
 
-        // icon
+        // store icon
         account.appIconPath = if (accountIcon != null) {
             storeIcon(context = context, iconName = account.appUrl, iconImageBitmap = accountIcon)
         } else {

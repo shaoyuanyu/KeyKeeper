@@ -39,3 +39,6 @@ fun storeIcon(context: Context, iconName: String, iconImageBitmap: ImageBitmap):
 
     return (context.filesDir.toString() + "/" + iconNameHash)
 }
+
+fun deleteIcon(context: Context, iconName: String): Boolean =
+    context.deleteFile(iconName.hashCode().toString())
