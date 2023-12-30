@@ -12,8 +12,8 @@ android {
         applicationId = "com.yusy.keykeeper"
         minSdk = 31
         targetSdk = 34
-        versionCode = 3
-        versionName = "3.1"
+        versionCode = 4
+        versionName = "4.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
