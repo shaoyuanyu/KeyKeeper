@@ -2,7 +2,7 @@ package com.yusy.keykeeper.ui.pages.authenticator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yusy.keykeeper.ui.pages.empty.EmptyUI
+import com.yusy.keykeeper.ui.pages.empty.EmptyScreen
 
 @Composable
 fun AuthenticatorScreen(modifier: Modifier = Modifier) {
@@ -11,5 +11,5 @@ fun AuthenticatorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun AuthenticatorBody(modifier: Modifier) {
-    EmptyUI(modifier = modifier)
+    EmptyScreen(modifier = modifier)
 }

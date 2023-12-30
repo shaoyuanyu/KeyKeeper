@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
 
 @Composable
-fun EmptyUI(
+fun EmptyScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -43,6 +43,6 @@ fun EmptyUI(
 
 @Preview
 @Composable
-fun EmptyUIPreview() {
-    EmptyUI()
+fun EmptyScreenPreview() {
+    EmptyScreen()
 }
