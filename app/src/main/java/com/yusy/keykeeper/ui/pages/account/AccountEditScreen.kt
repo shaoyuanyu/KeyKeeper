@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -244,7 +243,7 @@ fun AccountEditBody(
                 } else {
                     MaterialTheme.colorScheme.error
                 },
-                contentDescription = ""
+                contentDescription = null
             )
             Text(
                 text = if (accountEditUiState.accountDetails.plainPasswd.isEmpty()) {
@@ -296,7 +295,7 @@ fun EditInputForm(
             label = { Row {
                 Text(stringResource(R.string.account_page_account))
             } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+            leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit_off), contentDescription = null) },
             singleLine = true,
             readOnly = true
         )
@@ -310,7 +309,7 @@ fun EditInputForm(
                 Text(stringResource(R.string.account_page_passwd))
                 Text( color = MaterialTheme.colorScheme.error, text = "*")
             } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+            leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
             trailingIcon = {
                 Row {
                     IconButton(onClick = onPasswdVisibleChange) {
@@ -340,7 +339,7 @@ fun EditInputForm(
             Icon(
                 painter = painterResource(R.drawable.ic_infinity),
                 tint = MaterialTheme.colorScheme.tertiary,
-                contentDescription = ""
+                contentDescription = null
             )
             Text(
                 text = "生成可靠密码",
@@ -360,7 +359,7 @@ fun EditInputForm(
                     label = { Row {
                         Text(stringResource(R.string.account_page_appurl))
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appurl)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit_off), contentDescription = null) },
                     singleLine = true,
                     readOnly = true
                 )
@@ -374,7 +373,7 @@ fun EditInputForm(
                         Text(stringResource(R.string.account_page_appname))
                         Text( color = MaterialTheme.colorScheme.error, text = "*")
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appname)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     singleLine = true,
                 )
             } else if (appType == AppType.Website) {
@@ -387,7 +386,7 @@ fun EditInputForm(
                     label = { Row {
                         Text(stringResource(R.string.account_page_websiteurl))
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_websiteurl)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit_off), contentDescription = null) },
                     singleLine = true,
                     readOnly = true
                 )
@@ -401,7 +400,7 @@ fun EditInputForm(
                         Text(stringResource(R.string.account_page_websitename))
                         Text( color = MaterialTheme.colorScheme.error, text = "*")
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_websitename)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     singleLine = true,
                 )
             }

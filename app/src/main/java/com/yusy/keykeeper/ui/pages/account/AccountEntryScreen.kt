@@ -15,7 +15,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -191,7 +190,7 @@ fun AccountEntryBody(
                 } else {
                     MaterialTheme.colorScheme.error
                 },
-                contentDescription = ""
+                contentDescription = null
             )
             Text(
                 text = if (accountEntryUiState.accountDetails.plainPasswd.isEmpty()) {
@@ -248,7 +247,7 @@ fun EntryInputForm(
                 label = { Row {
                     Text(stringResource(R.string.account_page_account))
                 } },
-                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+                leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                 singleLine = true,
             )
             if (uidCandidateList.isNotEmpty()) {
@@ -262,7 +261,10 @@ fun EntryInputForm(
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp, vertical = 0.dp)
                             .shadow(elevation = 2.dp, shape = RoundedCornerShape(3.dp))
-                            .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(3.dp))
+                            .background(
+                                MaterialTheme.colorScheme.onPrimary,
+                                shape = RoundedCornerShape(3.dp)
+                            )
                     ) {
                         uidCandidateList.forEach {uidCandidate ->
                             DropdownMenuItem(
@@ -284,10 +286,10 @@ fun EntryInputForm(
                 Text(stringResource(R.string.account_page_passwd))
                 Text( color = MaterialTheme.colorScheme.error, text = "*")
             } },
-            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = "") },
+            leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
             trailingIcon = {
                IconButton(onClick = onGeneratePasswd) {
-                   Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = "")
+                   Icon(painter = painterResource(R.drawable.ic_infinity), contentDescription = null)
                }
             },
             singleLine = true,
@@ -303,7 +305,7 @@ fun EntryInputForm(
             Icon(
                 painter = painterResource(R.drawable.ic_infinity),
                 tint = MaterialTheme.colorScheme.tertiary,
-                contentDescription = ""
+                contentDescription = null
             )
             Text(
                 text = "生成可靠密码",
@@ -366,11 +368,11 @@ fun EntryInputForm(
                     label = { Row {
                         Text(stringResource(R.string.account_page_appurl))
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appurl)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     trailingIcon = {
                         IconButton(onClick = { onAppChoose() }) {
                             if (!isLoading) {
-                                Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = stringResource(R.string.account_page_chooseapp))
+                                Icon(painter = painterResource(id = R.drawable.ic_screen_search_desktop), contentDescription = null)
                             } else {
                                 CircularProgressIndicator()
                             }
@@ -389,7 +391,7 @@ fun EntryInputForm(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_screen_search_desktop),
                         tint = MaterialTheme.colorScheme.tertiary,
-                        contentDescription = stringResource(R.string.account_page_chooseapp)
+                        contentDescription = null
                     )
                     Text(
                         text = "在本地app中选择",
@@ -406,7 +408,7 @@ fun EntryInputForm(
                         Text(stringResource(R.string.account_page_appname))
                         Text( color = MaterialTheme.colorScheme.error, text = "*")
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_appname)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     singleLine = true,
                 )
             } else if (appType == AppType.Website) {
@@ -419,7 +421,7 @@ fun EntryInputForm(
                     label = { Row {
                         Text(stringResource(R.string.account_page_websiteurl))
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_websiteurl)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     singleLine = true,
                 )
 
@@ -432,7 +434,7 @@ fun EntryInputForm(
                         Text(stringResource(R.string.account_page_websitename))
                         Text( color = MaterialTheme.colorScheme.error, text = "*")
                     } },
-                    leadingIcon = { Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.account_page_websitename)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_edit), contentDescription = null) },
                     singleLine = true,
                 )
             }
