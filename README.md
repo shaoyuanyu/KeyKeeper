@@ -25,6 +25,7 @@
 - [x] 账号创建/修改/删除
 - [ ] 支持同一账号对应多个app/网站(比如一个Google账号对应Gmail/Chrome等多个app)
 - [ ] 更多加密算法支持
+- [ ] 分析手动输入密码的安全程度
 - [ ] 网站图标爬取
 - [x] Splash Screen
 - [ ] SplashScreenAVD和AppIcon绘制
