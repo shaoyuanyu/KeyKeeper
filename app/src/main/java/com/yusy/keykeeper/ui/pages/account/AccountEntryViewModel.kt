@@ -151,7 +151,9 @@ suspend fun getDeskAppList(context: Context): List<LocalDeskApp> {
 
         }
 
-        return@async localDeskAppArrayList.toList()
+        return@async localDeskAppArrayList.toList().sortedBy {
+            it.appName
+        }
 
     }.await()
 }
