@@ -23,8 +23,10 @@
 - [x] Room持久化开发
 - [x] 读取本地桌面App
 - [x] 账号创建/修改/删除
+- [ ] 更多加密算法支持
 - [ ] 网站图标爬取
-- [ ] Splash Screen
+- [x] Splash Screen
+- [ ] SplashScreenAVD和AppIcon绘制
 - [x] 首页卡片搜索和排序
 - [x] 进入KeyKeeper时进行生物验证
 - [ ] 自动填充服务
