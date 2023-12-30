@@ -76,6 +76,9 @@ fun AccountEditScreen(
         onAccountValueChange = viewModel::updateAccountEditUiState,
         onPasswdVisibleChange = {
             viewModel.changePasswdVisible()
+            clipboardManager.setText(AnnotatedString(viewModel.accountEditUiState.accountDetails.plainPasswd))
+            // TODO:弹窗文本本地化
+            Toast.makeText(context, "密码已为您复制到剪切板", Toast.LENGTH_SHORT).show()
         },
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
