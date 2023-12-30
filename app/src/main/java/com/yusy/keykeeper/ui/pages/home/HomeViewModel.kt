@@ -106,8 +106,8 @@ data class HomeUiState(
 }
 
 enum class SortType(val text: String) {
-    ByNameASC("根据app名排序(递增)"),
-    ByNameDESC("根据app名排序(递增)"),
+    ByNameASC("根据名称排序(递增)"),
+    ByNameDESC("根据名称排序(递增)"),
     ByCreatedTimeASC("根据创建时间排序(递增)"),
     ByCreatedTimeDESC("根据创建时间排序(递减)")
 }
