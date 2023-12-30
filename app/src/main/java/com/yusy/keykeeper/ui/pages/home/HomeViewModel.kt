@@ -40,11 +40,17 @@ fun HomeViewModel.updateSearchWord(searchWord: String) {
     homeUiState = homeUiState.updateSearchWord(searchWord)
 }
 
+fun HomeViewModel.updateSortType(sortType: SortType) {
+    homeUiState = homeUiState.updateSortType(sortType)
+}
+
 data class HomeUiState(
     var accountPreviewListFlow: Flow<List<AccountPreview>>,
     var accountPreviewList: List<AccountPreview> = listOf(),
     var searchWord: String = "",
-    var resultAccountPreviewList: List<AccountPreview> = listOf()
+    val sortTypeList: List<SortType> = listOf(SortType.ByNameASC, SortType.ByNameDESC, SortType.ByCreatedTimeASC, SortType.ByCreatedTimeDESC),
+    val currentSortType: SortType = SortType.ByCreatedTimeDESC,
+    var resultAccountPreviewList: List<AccountPreview> = listOf(),
 ) {
     suspend fun updateAccountPreviewList(): HomeUiState {
         val accountPreviewList = this.accountPreviewListFlow.first()
@@ -59,6 +65,12 @@ data class HomeUiState(
         this.copy(
             searchWord = searchWord,
             resultAccountPreviewList = doSearch(this.accountPreviewList, searchWord)
+        )
+
+    fun updateSortType(sortType: SortType): HomeUiState =
+        this.copy(
+            currentSortType = sortType,
+            resultAccountPreviewList = doSort(sortType)
         )
 
     private fun doSearch(accountPreviewList: List<AccountPreview>, targetName: String): List<AccountPreview> {
@@ -77,4 +89,25 @@ data class HomeUiState(
 
         return results.toList()
     }
+
+    private fun doSort(sortType: SortType): List<AccountPreview> =
+        when(sortType) {
+            SortType.ByNameASC ->
+                this.resultAccountPreviewList.sortedBy { it.appName }
+            SortType.ByNameDESC ->
+                this.resultAccountPreviewList.sortedByDescending { it.appName }
+            SortType.ByCreatedTimeASC ->
+                this.resultAccountPreviewList.sortedBy { it.createdAt }
+            SortType.ByCreatedTimeDESC ->
+                this.resultAccountPreviewList.sortedByDescending { it.createdAt }
+            else ->
+                this.resultAccountPreviewList
+        }
+}
+
+enum class SortType(val text: String) {
+    ByNameASC("根据app名排序(递增)"),
+    ByNameDESC("根据app名排序(递增)"),
+    ByCreatedTimeASC("根据创建时间排序(递增)"),
+    ByCreatedTimeDESC("根据创建时间排序(递减)")
 }
