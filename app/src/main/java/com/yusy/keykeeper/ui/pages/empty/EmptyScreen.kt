@@ -14,9 +14,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yusy.keykeeper.R
+import com.yusy.keykeeper.ui.theme.KeyKeeperTheme
 
 @Composable
-fun EmptyUI(
+fun EmptyScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -43,6 +44,8 @@ fun EmptyUI(
 
 @Preview
 @Composable
-fun EmptyUIPreview() {
-    EmptyUI()
+fun EmptyScreenPreview() {
+    KeyKeeperTheme {
+        EmptyScreen()
+    }
 }

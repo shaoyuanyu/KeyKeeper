@@ -20,7 +20,7 @@ import com.yusy.keykeeper.ui.pages.account.AccountEntryViewModel
 import com.yusy.keykeeper.ui.pages.account.AppChooseScreen
 import com.yusy.keykeeper.ui.pages.authenticator.AuthenticatorScreen
 import com.yusy.keykeeper.ui.pages.home.HomeScreen
-import com.yusy.keykeeper.ui.pages.mine.MineUI
+import com.yusy.keykeeper.ui.pages.mine.MineScreen
 import com.yusy.keykeeper.ui.pages.setting.SettingUI
 
 @Composable
@@ -56,7 +56,7 @@ fun MyNavHost(
             }
 
             composable(MyRoutes.MINE) {
-                MineUI()
+                MineScreen()
             }
 
             // second

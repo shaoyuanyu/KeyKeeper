@@ -11,7 +11,6 @@ object MyRoutes {
     const val MINE = "Mine"
 
     // second level
-    const val SETTING = "Setting"
     const val ACCOUNT_CREATE_PAGE = "AccountCreatePage"
     const val ACCOUNT_EDIT_PAGE = "AccountEditPage"
     const val APP_CHOOSE_PAGE = "AppChoosePage"
