@@ -1,7 +1,8 @@
 package com.yusy.keykeeper.ui.pages.hello
 
 import android.content.Intent
-import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -38,9 +39,9 @@ fun HelloScreen() {
     // TODO:弹窗文本本地化
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle("安全验证")
-        .setSubtitle("验证指纹以进入KeyKeeper")
-        .setNegativeButtonText("取消")
-        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+        .setSubtitle("验证指纹或输入PIN码以进入KeyKeeper")
+//        .setNegativeButtonText("取消") // setNegativeButtonText() 和 setAllowedAuthenticators(DEVICE_CREDENTIAL) 不可以同时使用
+        .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
         .build()
 
     HelloBody(
@@ -88,7 +89,7 @@ fun HelloBody(
 
             // TODO:文本本地化
             Text(
-                text = "验证指纹以进入KeyKeeper",
+                text = "验证身份以进入KeyKeeper",
                 color = MaterialTheme.colorScheme.secondary
             )
         }

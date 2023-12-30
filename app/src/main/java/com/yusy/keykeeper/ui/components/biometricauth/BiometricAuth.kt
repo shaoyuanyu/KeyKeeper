@@ -51,21 +51,3 @@ fun BiometricAuth(
         }
     }
 }
-
-@Preview
-@Composable
-fun BiometricAuthPreview() {
-    KeyKeeperTheme {
-        BiometricAuth(
-            promptInfo = PromptInfo.Builder()
-                .setTitle("安全验证")
-                .setSubtitle("请验证指纹以进入app")
-                .setNegativeButtonText("取消")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG)
-                .build(),
-            onAuthenticationSucceeded = { },
-            onAuthenticationFailed = { },
-            onAuthenticationError = { }
-        )
-    }
-}
