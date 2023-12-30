@@ -244,23 +244,6 @@ fun AccountEditBody(
             )
         }
 
-        // delete button
-        Button(
-            shape = MaterialTheme.shapes.medium,
-            onClick = { onDelete() },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.error
-            ),
-            modifier = inputModifier
-        ) {
-            Icon(Icons.Default.Delete, contentDescription = null)
-            Text(
-                text = stringResource(R.string.account_page_delete),
-                fontSize = 14.sp
-            )
-        }
-
         // 提示词 - 比如密码不得为空
         // TODO:文本本地化
         val hintTextModifier = Modifier
@@ -295,6 +278,23 @@ fun AccountEditBody(
                 } else {
                     MaterialTheme.colorScheme.error
                 }
+            )
+        }
+
+        // delete button
+        Button(
+            shape = MaterialTheme.shapes.medium,
+            onClick = { onDelete() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.error
+            ),
+            modifier = inputModifier
+        ) {
+            Icon(Icons.Default.Delete, contentDescription = null)
+            Text(
+                text = stringResource(R.string.account_page_delete),
+                fontSize = 14.sp
             )
         }
     }
