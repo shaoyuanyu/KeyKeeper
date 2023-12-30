@@ -65,6 +65,7 @@ fun AccountEditScreen(
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     var openDeleteDialog by remember { mutableStateOf(false) }
+    var openSaveDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.setId(id)
@@ -79,14 +80,9 @@ fun AccountEditScreen(
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
         },
-        onSave = { passwd ->
-            coroutineScope.launch {
-                viewModel.saveAccount()
-                myNavActions.navigateBack()
-                clipboardManager.setText(AnnotatedString(passwd))
-                // TODO:弹窗文本本地化
-                Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
-            }
+        onSave = {
+            // 显示弹窗
+            openSaveDialog = true
         },
         onDelete = {
             // 显示弹窗
@@ -129,6 +125,42 @@ fun AccountEditScreen(
             },
         )
     }
+
+    if (openSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { openSaveDialog = false },
+            title = {
+                Icon(Icons.Default.Warning, contentDescription = null)
+            },
+            text = {
+                Text(text = "保存后将覆盖原有的账号数据，是否确认保存？")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        openSaveDialog = false
+
+                        coroutineScope.launch {
+                            viewModel.saveAccount()
+                            clipboardManager.setText(AnnotatedString(viewModel.accountEditUiState.accountDetails.plainPasswd))
+                            myNavActions.navigateBack()
+                            // TODO:弹窗文本本地化
+                            Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                ) {
+                    Text(text = "确认")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { openSaveDialog = false }
+                ) {
+                    Text(text = "取消")
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -137,7 +169,7 @@ fun AccountEditBody(
     onAccountValueChange: (AccountDetails) -> Unit,
     onPasswdVisibleChange: () -> Unit,
     onGeneratePasswd: () -> Unit,
-    onSave: (String) -> Unit,
+    onSave: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -194,7 +226,7 @@ fun AccountEditBody(
             enabled = accountEditUiState.isValid,
             onClick = {
                 if (accountEditUiState.isValid) {
-                    onSave(accountEditUiState.accountDetails.plainPasswd)
+                    onSave()
                 }
             },
             modifier = inputModifier
@@ -250,6 +282,8 @@ fun AccountEditBody(
                     "密码不得为空"
                 } else if (accountEditUiState.accountDetails.appName.isEmpty()) {
                     "应用名不得为空"
+                } else if (!accountEditUiState.isValid) {
+                    "数据未更改"
                 } else {
                     "数据校验成功"
                 },

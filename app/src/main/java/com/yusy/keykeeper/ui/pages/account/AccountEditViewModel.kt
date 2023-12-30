@@ -40,7 +40,7 @@ fun AccountEditViewModel.setId(id: Int) {
 
         accountEditUiState = accountToDelete
             .toAccountDetails()
-            .toAccountEditUiState(true)
+            .toAccountEditUiState(false)
     }
 }
 
@@ -74,6 +74,7 @@ suspend fun AccountEditViewModel.deleteAccount() {
 
 data class AccountEditUiState(
     val accountDetails: AccountDetails = AccountDetails(),
+    val originalAccountDetails: AccountDetails = AccountDetails(),
     var isValid: Boolean = true,
     var isPasswdVisible: Boolean = false
 ) {
@@ -92,7 +93,7 @@ data class AccountEditUiState(
         this.copy(isPasswdVisible = !this.isPasswdVisible)
 
     private fun doValidate(accountDetails: AccountDetails): Boolean =
-        with(accountDetails) {
+        (accountDetails != this.originalAccountDetails) && with(accountDetails) {
             // appName和plainPasswd不可为空
             appName.isNotBlank() && plainPasswd.isNotBlank()
         }
@@ -100,5 +101,6 @@ data class AccountEditUiState(
 
 fun AccountDetails.toAccountEditUiState(isValid: Boolean): AccountEditUiState = AccountEditUiState(
     accountDetails = this,
+    originalAccountDetails = this,
     isValid = isValid
 )
