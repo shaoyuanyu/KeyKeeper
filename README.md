@@ -31,7 +31,8 @@
 - [ ] SplashScreenAVD和AppIcon绘制
 - [x] 首页卡片搜索和排序
 - [x] 进入KeyKeeper时进行生物验证
-- [ ] 自动填充服务
+- [x] 自动填充服务(依托autofill框架)
+- [ ] 拓展更好用的自动填充服务(依托accessibility框架)
 - [ ] 提供2FA支持
 - [ ] 设置页面
 - [ ] OpenHarmony版本
