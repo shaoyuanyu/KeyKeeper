@@ -9,9 +9,9 @@ class OfflineAccountsRepository(
     // Account
     override fun getAllAccountsStream(): Flow<List<Account>> = accountDao.getAllAccounts()
 
-    override fun getAccountStreamByUid(uid: String): Flow<Account?> = accountDao.getAccountByUid(uid)
-
     override fun getAccountStreamById(id: Int): Flow<Account> = accountDao.getAccountById(id)
+
+    override fun getAccountStreamByAppUrl(appUrl: String): Flow<List<Account>> = accountDao.getAccountByAppUrl(appUrl)
 
     override suspend fun insertAccount(account: Account) = accountDao.insert(account)
 

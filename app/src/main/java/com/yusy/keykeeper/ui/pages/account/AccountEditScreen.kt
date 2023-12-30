@@ -75,10 +75,13 @@ fun AccountEditScreen(
         accountEditUiState = viewModel.accountEditUiState,
         onAccountValueChange = viewModel::updateAccountEditUiState,
         onPasswdVisibleChange = {
+            if (!viewModel.accountEditUiState.isPasswdVisible) {
+                clipboardManager.setText(AnnotatedString(viewModel.accountEditUiState.accountDetails.plainPasswd))
+                // TODO:弹窗文本本地化
+                Toast.makeText(context, "密码已为您复制到剪切板", Toast.LENGTH_SHORT).show()
+            }
+
             viewModel.changePasswdVisible()
-            clipboardManager.setText(AnnotatedString(viewModel.accountEditUiState.accountDetails.plainPasswd))
-            // TODO:弹窗文本本地化
-            Toast.makeText(context, "密码已为您复制到剪切板", Toast.LENGTH_SHORT).show()
         },
         onGeneratePasswd = {
             viewModel.generateSecurePasswd()
@@ -109,10 +112,10 @@ fun AccountEditScreen(
                         openDeleteDialog = false
 
                         coroutineScope.launch {
-                            viewModel.deleteAccount()
+                            viewModel.deleteAccount(context)
                             myNavActions.navigateBack()
                             // TODO:弹窗文本本地化
-                            Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show()
                         }
                     }
                 ) {
@@ -148,7 +151,7 @@ fun AccountEditScreen(
                             clipboardManager.setText(AnnotatedString(viewModel.accountEditUiState.accountDetails.plainPasswd))
                             myNavActions.navigateBack()
                             // TODO:弹窗文本本地化
-                            Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "修改成功，密码已为您复制到剪切板", Toast.LENGTH_SHORT).show()
                         }
                     }
                 ) {

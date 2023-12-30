@@ -6,9 +6,9 @@ interface AccountsRepository {
     // Account
     fun getAllAccountsStream(): Flow<List<Account>>
 
-    fun getAccountStreamByUid(uid: String): Flow<Account?>
-
     fun getAccountStreamById(id: Int): Flow<Account>
+
+    fun getAccountStreamByAppUrl(appUrl: String): Flow<List<Account>>
 
     suspend fun insertAccount(account: Account)
 

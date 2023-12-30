@@ -23,13 +23,16 @@
 - [x] Room持久化开发
 - [x] 读取本地桌面App
 - [x] 账号创建/修改/删除
+- [ ] 支持同一账号对应多个app/网站(比如一个Google账号对应Gmail/Chrome等多个app)
 - [ ] 更多加密算法支持
+- [ ] 分析手动输入密码的安全程度
 - [ ] 网站图标爬取
 - [x] Splash Screen
 - [ ] SplashScreenAVD和AppIcon绘制
 - [x] 首页卡片搜索和排序
 - [x] 进入KeyKeeper时进行生物验证
-- [ ] 自动填充服务
+- [x] 自动填充服务(依托autofill框架)
+- [ ] 拓展更好用的自动填充服务(依托accessibility框架)
 - [ ] 提供2FA支持
 - [ ] 设置页面
 - [ ] OpenHarmony版本

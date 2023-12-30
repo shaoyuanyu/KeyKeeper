@@ -1,5 +1,6 @@
 package com.yusy.keykeeper.ui.pages.account
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,8 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yusy.keykeeper.data.account.Account
 import com.yusy.keykeeper.data.account.AccountsRepository
+import com.yusy.keykeeper.utils.deleteIcon
 import com.yusy.keykeeper.utils.generatePasswd
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -62,7 +65,7 @@ suspend fun AccountEditViewModel.saveAccount() {
     }
 }
 
-suspend fun AccountEditViewModel.deleteAccount() {
+suspend fun AccountEditViewModel.deleteAccount(context: Context) {
     // delete account
     accountsRepository.deleteAccount(accountToDelete)
 
@@ -70,6 +73,11 @@ suspend fun AccountEditViewModel.deleteAccount() {
     // TODO:防错机制
     val usedUid = accountsRepository.getUsedUid(accountToDelete.uid).first()!!
     accountsRepository.updateUsedUid(usedUid.copy(usedTimes = --usedUid.usedTimes))
+
+    // delete appIcon
+    if (accountsRepository.getAccountStreamByAppUrl(accountToDelete.appUrl).firstOrNull() == null) {
+        deleteIcon(context, accountToDelete.appUrl)
+    }
 }
 
 data class AccountEditUiState(
