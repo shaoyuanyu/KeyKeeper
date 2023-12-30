@@ -23,6 +23,7 @@
 - [x] Room持久化开发
 - [x] 读取本地桌面App
 - [x] 账号创建/修改/删除
+- [ ] 支持同一账号对应多个app/网站(比如一个Google账号对应Gmail/Chrome等多个app)
 - [ ] 更多加密算法支持
 - [ ] 网站图标爬取
 - [x] Splash Screen
