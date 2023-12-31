@@ -28,7 +28,7 @@
 - [ ] 分析手动输入密码的安全程度
 - [ ] 网站图标爬取
 - [x] Splash Screen
-- [ ] SplashScreenAVD和AppIcon绘制
+- [x] SplashScreenAVD和AppIcon绘制
 - [x] 首页卡片搜索和排序
 - [x] 进入KeyKeeper时进行生物验证
 - [x] 自动填充服务(依托autofill框架)
