@@ -79,10 +79,10 @@ fun HelloBody(
             modifier = Modifier.align(Alignment.Center)
         ) {
             Image(
-                painter = painterResource(R.drawable.appic_key_keeper_round),
+                painter = painterResource(R.mipmap.appic_key_keeper_round),
                 modifier = Modifier
+                    .size(192.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clip(CircleShape)
                     .padding(bottom = 20.dp),
                 contentDescription = null
             )
@@ -90,7 +90,9 @@ fun HelloBody(
             // TODO:文本本地化
             Text(
                 text = "验证身份以进入KeyKeeper",
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
             )
         }
 
